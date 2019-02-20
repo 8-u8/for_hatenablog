@@ -1,3 +1,10 @@
+####
+# 20190220
+# データのエンコーディングによってはdummies::dummy.data.frame()による変換後に
+# colnamesが文字化けする事象を確認。
+# Todo: 再現検証
+####
+
 install.packages("dummies") # If you do not install package.
 library(dummies)
 
