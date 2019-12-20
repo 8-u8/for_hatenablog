@@ -24,7 +24,7 @@ print((test$ID %>% head))
 use_y     <- train$y
 use_Model <- train %>% 
   dplyr::select(-y, -ID) %>% 
-  data.matrix()
+  data.matrix()ｚ
 
 output_test <- matrix(0, 61, 10)
 # 300回実行。

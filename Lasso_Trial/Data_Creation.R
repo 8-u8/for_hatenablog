@@ -36,4 +36,4 @@ for(i in 1:5000){
 
 
 UseData   <- data.frame(ID=c(1:5000), Var = X, y = y)
-write.csv(UseData, "/home/u0-0/Desktop/for_hatenablog/Lasso_Trial/UseData.csv", row.names = FALSE)
+# write.csv(UseData, "/home/u0-0/Desktop/for_hatenablog/Lasso_Trial/UseData.csv", row.names = FALSE)
