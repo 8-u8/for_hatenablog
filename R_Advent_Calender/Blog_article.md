@@ -297,14 +297,136 @@ glm_plot
 しかし、人は強欲なものです。例えば以下のような場合、一般化線形モデルはそれを説明する術を持ちません。
 
 - ポアソン回帰において、店舗ごとに集めた日次のデータ1年分で1日の売上を説明したい。
-- ロジスティック回帰において、客室のランク別に生存予測・説明をしたい
+- ロジスティック回帰において、特定のカテゴリ別に生存予測・説明をしたい
 - 0がめちゃくちゃ多い不均衡データに対してのモデリングをしたい。
 
 これらの問題は「ある変数によって仮定している分布のパラメータが違うんじゃない？」という話に帰着します。  
 「人によって違うじゃない！」と言うやつです。困りました。  
 これに対して**一般化**線形**混合**モデルは、仮定する分布をさらに拡張して、パラメータが既知の混合分布なら使えるようにします。  
 「混合分布」は、「確率分布Aと確率分布Bを混ぜたやつ」みたいな感じです。   
-代表的な混合分布に負の二項分布があります。これはポアソン分布のパラメータ$\lambda$がガンマ分布に従うと仮定して拡張した分布としての定義があります((Poisson-Gamma Mixture))。
+代表的な混合分布に負の二項分布があります。これはポアソン分布のパラメータ$\lambda$がガンマ分布に従うと仮定して拡張した分布としての定義があります((Poisson-Gamma Mixture))。  
+
+せっかくなのでデータも作ります。
+
+```r
+library(lme4)
+library(tidyverse)
+set.seed(1234)
+
+x <- c(abs(rnorm(20, 3, 4)),
+       abs(rnorm(30, 0, 1)),
+       abs(rnorm(50, 6, 4))
+       )
+cat <- c(rep(1,20), rep(2,30), rep(3,50))
+y <- numeric(100)
+gam <- numeric(100)
+for(i in 1:20){
+  gam[i] <- rgamma(1, shape = 4 * x[i]) + 0
+  y[i]   <- rpois(1, gam[i])
+}
+for(i in 21:30){
+  gam[i] <- rgamma(1, shape =  4 * x[i]) + 5.0
+  y[i]   <- rpois(1, gam[i])
+}
+for(i in 31:50){
+  gam[i] <- rgamma(1, shape = 4*x[i]) + 10
+  y[i]   <- rpois(1, gam[i])
+}
+
+usedata <- data.frame(y = y, x = x, cat = cat)
+
+usedata %>% summary
+
+usedata$y %>% var   # 96.00919
+usedata$y %>% mean  # 6.03
+
+``` 
+
+ポアソン分布についてのお話はしていませんでした。  
+ポアソン分布は「0以上の整数をとり、平均と分散が同じ値になる分布」です。  
+一方で、今回生成したデータは平均と分散が一致しません。これを過分散(Overdispersion)と呼びます。  
+こういう時には単純なポアソン回帰と言うよりは、何らかの混合分布を残差に置いたほうが良いだろう、と考えます。  
+何なら今回のデータ、[tex: x]の生成過程が違って、それに応じてyのパラメータもちょっとずつ違うっぽく作っています。  
+
+比較したいしポアソン回帰も実行します。
+
+```r
+model_pois <- glm(y ~ x, data = usedata, family = "poisson")
+summary(model_pois)
+# Call:
+#   glm(formula = y ~ x, family = "poisson", data = usedata)
+# 
+# Deviance Residuals: 
+#   Min      1Q  Median      3Q     Max  
+# -3.808  -3.337  -2.759   0.787  15.643  
+# 
+# Coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  1.98627    0.05586  35.557  < 2e-16 ***
+#   x           -0.05012    0.01118  -4.484 7.34e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# (Dispersion parameter for poisson family taken to be 1)
+# 
+# Null deviance: 1233.5  on 99  degrees of freedom
+# Residual deviance: 1211.7  on 98  degrees of freedom
+# AIC: 1411.3
+# 
+# Number of Fisher Scoring iterations: 7
+model_lme4 <- lme4::glmer.nb(y ~ x + (1|cat), data = usedata)
+summary(model_lme4)
+
+# Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+# Family: Negative Binomial(7.0696)  ( log )
+# Formula: y ~ x + (1 | cat)
+# Data: usedata
+# 
+# AIC      BIC   logLik deviance df.resid 
+# 323.2    333.7   -157.6    315.2       96 
+# 
+# Scaled residuals: 
+#   Min       1Q   Median       3Q      Max 
+# -1.69248 -0.13224 -0.03589 -0.01440  2.13598 
+# 
+# Random effects:
+#   Groups Name        Variance Std.Dev.
+# cat    (Intercept) 32.78    5.726   
+# Number of obs: 100, groups:  cat, 3
+# 
+# Fixed effects:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.3935     3.6930  -0.648    0.517    
+# x             0.3068     0.0376   8.160 3.35e-16 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Correlation of Fixed Effects:
+#   (Intr)
+# x -0.070
+
+```
+
+どちらも回帰係数は統計的に有意ですが、`lme4::glmer.nb`での推定のほうが、AICや逸脱度などを見ると、ポアソン回帰の結果よりも改善していることが確認できます。  
+GLMMでの特徴は、モデルを「ランダム効果」と「固定効果」に分ける点です。  
+今回はデータの設計上切片が`cat`変数によって異なるという前提で(つまりxの傾きは`cat`によらず一定)で回しました((実はこのレベルだとglm.nb関数でもできてしまいますが、切片だけじゃなく傾きにもランダム効果を設けたいときは、lme4で回ります))。  
+
+え？可視化？
+
+```r
+result <- data.frame(res_lme4 = expm1(predict(model_lme4)),
+                     res_pois = expm1(predict(model_pois)),
+                     y        = usedata$y)
+plot_pois <- ggplot2::ggplot(data = result, aes(x = res_pois, y)) + geom_point()
+plot_lme4 <- ggplot2::ggplot(data = result, aes(x = res_lme4, y)) + geom_point()
+plot_lme4_fix <- plot_lme4 + xlim(c(0,40))
+plot_pois
+
+```
+
+ポアソン回帰
+
+ポアソン・ガンマ回帰
 
 ## さらにその先へ――
 一般化線形混合モデルは「パラメータが既知」の混合分布にまで拡張します。人はこう考えるわけです。  

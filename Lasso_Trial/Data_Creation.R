@@ -9,7 +9,7 @@ library(tidyverse)
 
 
 ### 乱数生成次はset.seedを並列に実行しないと固定されない。
-X <- matrix(0, 5000, 60)
+X <- matrix(0, 5000, 600)
 p=1
 for(i in 1:ncol(X)){
   # p <- runif(1)
@@ -21,19 +21,21 @@ for(i in 1:ncol(X)){
 }
 
 X <- X %>% data.matrix()
-set.seed(1234);obs_weights <- abs(rnorm(60, 0, 1)) %>% data.matrix()
+set.seed(1234);
+obs_weights <- abs(rnorm(600, 0, 100)) %>% data.matrix()
 obs_weights[obs_weights<=0.6] <- 0
 y <- numeric(5000)
 for(i in 1:5000){
   y[i]  <- t(obs_weights) %*%  X[i, ]
-  # print(y[i])
-  if(y[i] >= 10){
+  print(y[i])
+  if(y[i] >= 6000){
     y[i] <- 1
   }else{
     y[i] <- 0
   }
 }
 
+y %>% summary()
 
 UseData   <- data.frame(ID=c(1:5000), Var = X, y = y)
-# write.csv(UseData, "/home/u0-0/Desktop/for_hatenablog/Lasso_Trial/UseData.csv", row.names = FALSE)
+ write.csv(UseData, "/home/u0-0/Desktop/kedro_trial/kedro_classification/data/01_raw/UseData.csv", row.names = FALSE)
