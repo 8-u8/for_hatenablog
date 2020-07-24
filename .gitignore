@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 *.code-workspace
+./for_hatenablog/requirements.txt
+./for_hatenablog/Pipfile
