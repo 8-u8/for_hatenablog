@@ -38,4 +38,4 @@ for(i in 1:5000){
 y %>% summary()
 
 UseData   <- data.frame(ID=c(1:5000), Var = X, y = y)
- write.csv(UseData, "/home/u0-0/Desktop/kedro_trial/kedro_classification/data/01_raw/UseData.csv", row.names = FALSE)
+write.csv(UseData, "/home/t0_u0/Desktop/for_hatenablog/l1_reguralization/UseData.csv", row.names = FALSE)
