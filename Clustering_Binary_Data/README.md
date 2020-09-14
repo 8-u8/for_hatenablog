@@ -8,39 +8,68 @@ dir.create("./02_output")
 dir.create("./03_source")
 
 # 実験データ作成
-set.seed(1234)
-x11 <- rbinom(30, 1, 0.5)
-x12 <- rbinom(20, 1, 0.75)
-x13 <- rbinom(50, 1, 0.2)
+library(dplyr)
+binom_cls_data_creator <- function(nrow, npat, num_cls){
+ # "
+ # data_create.Rの一般化。
+ # クラスタ別に異なるパラメータを持つ二値変数を生成する。
+ # "
+  init_prob <- runif(num_cls) # 初期の生成確率。
+  print(round(init_prob, digits = 2))
+  init_x1   <- numeric() # x1の生成
+  output    <- numeric() # 出力
+  
+  ## x1xとx4xを作る
+  for(cls in 1:num_cls){
+    init_x1_tmp <- rbinom(nrow, 1, init_prob[cls])
+    init_x4_tmp <- rnorm(nrow, mean = (runif(1) * 10)^2, sd = 1)
+    if(cls == 1){
+      init_x1_in <- init_x1_tmp
+      init_x4_in <- init_x4_tmp
+      init_x1_out <- init_x1_tmp
+      init_x4_out <- init_x4_tmp
+    }else{
+      init_x1_in <- cbind(init_x1_in, init_x1_tmp)
+      init_x4_in <- cbind(init_x4_in, init_x4_tmp)
+      init_x1_out <- c(init_x1_out, init_x1_tmp)
+      init_x4_out <- c(init_x4_out, init_x4_tmp)
+      
+    }
+  }
+  
+  ## x2x以降を作る
+  for(pat in 1:npat){
+    for(cls in 1:num_cls){
+      ## 基本は同じだが、生成過程を変える。
+      ## 各クラスタでのx1onの条件で分岐する。
+      ## xx同士は独立(x1との交絡)
+      init_xx_tmp <- ifelse(init_x1_in[,cls]==1,
+                            rbinom(nrow, 1, runif(nrow, min = 0.8)),
+                            rbinom(nrow, 1, runif(nrow, min = 0.2))
+                            )
+      if(cls == 1){
+        init_xx_in <- init_xx_tmp
+        init_xx_out <- init_xx_tmp
+      }else{
+        init_xx_in <- cbind(init_x1_in, init_xx_tmp)
+        init_xx_out <- c(init_xx_out, init_xx_tmp)
+      } 
+    }
 
-## x11, x12, x13とそれぞれ対応するように変数を作成
-x21 <- ifelse(x11==1, rbinom(30, 1, 0.7), rbinom(30, 1, 0.1))
-x22 <- ifelse(x12==1, rbinom(20, 1, 0.8), rbinom(20, 1, 0.05))
-x23 <- ifelse(x13==1, rbinom(50, 1, 0.75), rbinom(50, 1, 0.25))
-
-x31 <- ifelse(x11==1, rbinom(30, 1, 0.9), rbinom(30, 1, 0.1))
-x32 <- ifelse(x12==1, rbinom(20, 1, 0.6), rbinom(20, 1, 0.04))
-x33 <- ifelse(x13==1, rbinom(50, 1, 0.59), rbinom(50, 1, 0.01))
-
-## 比較のため、連続値も独立に挿入
-x41 <- rnorm(30, 0, 1)
-x42 <- rnorm(20, 5, 1)
-x43 <- rnorm(50, -3, 1)
-
-## データとして保持
-kmeans_data <- data.frame(
-  id = paste0("id_", c(1:100)),
-  numID = c(1:100),
-  x1 = c(x11, x12, x13),
-  x2 = c(x21, x22, x23),
-  x3 = c(x31, x32, x33),
-  x4 = c(x41, x42, x43)
-)
-
-rm(x11, x12, x13,
-   x21, x22, x23,
-   x31, x32, x33,
-   x41, x42, x43)
+    if(pat == 1){
+      output <- cbind(init_x1_out, init_xx_out)
+    }else{
+      output <- cbind(output, init_xx_out)
+    }
+  }
+  colnames(output) <- paste0("x", c(1:ncol(output)))
+  # colnames(init_x4_out) <- paste0("x_norm" ,c(1:ncol(init_x4)))
+  output <- cbind(output, init_x4_out)
+  output <- output %>%
+    as.data.frame
+  #   dplyr::arrange(x1)
+  return(output)
+}
 
 ## graph_function
 ### データの可視化を1関数で実現。

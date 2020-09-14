@@ -2,30 +2,37 @@ library(dplyr)
 library(ggplot2)
 library(gridExtra)
 
-
+set.seed(1234)
 source("./03_source/data_create.R")
 
+kmeans_data <- binom_cls_data_creator(1000, 500, 3)
 
 params <- list()
 params$width <- 800
 params$height <- 600
 
-d_mat_bin <- dist(kmeans_data[,c("x1", "x2", "x3")], method = "binary")
+kmeans_data_bin <- kmeans_data %>% 
+  dplyr::select(-init_x4_out)
+
+
+
+d_mat_bin <- dist(kmeans_data_bin, method = "binary")
 h_cluster_bin <- hclust(d_mat_bin, method = "ward.D2")
 
 png("./02_output/pic3-1_dendrogram_binary_data.png", width = params$width, height = params$height)
 plot(h_cluster_bin)
 dev.off()
 kmeans_data$cls <- paste0("hclust_",cutree(h_cluster_bin, k=3))
+kmeans_data$numID <- c(1:nrow(kmeans_data))
 
 png("./02_output/pic3-2_hclust_with_only_bin.png", width = params$width, height = params$height)
 graph_bin <-  plot_this_proj()
 dev.off()
 
-kmeans_data <- kmeans_data %>% 
-  dplyr::select(-cls)
+kmeans_data_con <- kmeans_data %>% 
+  dplyr::select(-cls, -numID)
 
-d_mat_con <- dist(kmeans_data[,c("x1", "x2", "x3", "x4")], method = "euclidean")
+d_mat_con <- dist(kmeans_data_con, method = "euclidean")
 h_cluster_con <- hclust(d_mat_con, method = "ward.D2")
 png("./02_output/pic3-3.dendrogram_all_data.png", width = params$width, height = params$height)
 plot(h_cluster_con)
