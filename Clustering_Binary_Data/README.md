@@ -103,8 +103,12 @@ plot_this_proj <- function(){
 ### クラスタリング実行
 ```r
 ## k-means for binary data ONLY
-k_means_bin <- stats::kmeans(kmeans_data[,c("x1", "x2", "x3")], centers = 3, iter.max = 20000)
+kmeans_data_bin <- kmeans_data %>% 
+  dplyr::select(-init_x4_out)
+
+k_means_bin <- stats::kmeans(kmeans_data_bin, centers = 3, iter.max = 20000)
 kmeans_data$cls <- paste0("clster_",k_means_bin$cluster)
+kmeans_data$numID <- c(1:nrow(kmeans_data))
 
 png("./02_output/pic1_kmeans_with_only_bin.png", width = 800, height = 600)
 graph_bin <-  plot_this_proj()
@@ -122,18 +126,24 @@ dev.off()
 
 ### クラスタリング実行
 ```r
+kmeans_data <- binom_cls_data_creator(1000, 500, 3)
+
 params <- list()
 params$width <- 800
 params$height <- 600
 
-d_mat_bin <- dist(kmeans_data[,c("x1", "x2", "x3")], method = "binary")
+kmeans_data_bin <- kmeans_data %>% 
+  dplyr::select(-init_x4_out)
+d_mat_bin <- dist(kmeans_data_bin, method = "binary")
 h_cluster_bin <- hclust(d_mat_bin, method = "ward.D2")
 
+# デンドログラム描写
 png("./02_output/pic3-1_dendrogram_binary_data.png", width = params$width, height = params$height)
 plot(h_cluster_bin)
 dev.off()
 kmeans_data$cls <- paste0("hclust_",cutree(h_cluster_bin, k=3))
 
+# 散布図描写
 png("./02_output/pic3-2_hclust_with_only_bin.png", width = params$width, height = params$height)
 graph_bin <-  plot_this_proj()
 dev.off()
