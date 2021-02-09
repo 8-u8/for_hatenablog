@@ -2,10 +2,9 @@ library(dplyr)
 library(ggplot2)
 library(gridExtra)
 
-set.seed(1234)
 source("./03_source/data_create.R")
 
-kmeans_data <- binom_cls_data_creator(1000, 500, 3)
+kmeans_data <- binom_cls_data_creator(35, 3000, 3)
 
 params <- list()
 params$width <- 800
@@ -16,13 +15,17 @@ kmeans_data_bin <- kmeans_data %>%
 
 
 
-d_mat_bin <- dist(kmeans_data_bin, method = "binary")
-h_cluster_bin <- hclust(d_mat_bin, method = "ward.D2")
+d_mat_bin <- dist(kmeans_data_bin, method = "binary", diag = TRUE, upper = TRUE)
+a <- as.matrix(d_mat_bin)
+
+
+
+h_cluster_bin <- hclust(d_mat_bin, method = "single")
 
 png("./02_output/pic3-1_dendrogram_binary_data.png", width = params$width, height = params$height)
 plot(h_cluster_bin)
 dev.off()
-kmeans_data$cls <- paste0("hclust_",cutree(h_cluster_bin, k=3))
+kmeans_data$cls <- paste0("hclust_",cutree(h_cluster_bin,k = 3,h = 0.30))
 kmeans_data$numID <- c(1:nrow(kmeans_data))
 
 png("./02_output/pic3-2_hclust_with_only_bin.png", width = params$width, height = params$height)

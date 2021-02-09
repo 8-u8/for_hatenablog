@@ -16,6 +16,8 @@ binom_cls_data_creator <- function(nrow, npat, num_cls){
  # data_create.Rの一般化。
  # クラスタ別に異なるパラメータを持つ二値変数を生成する。
  # "
+  set.seed(114)
+  
   init_prob <- runif(num_cls) # 初期の生成確率。
   print(round(init_prob, digits = 2))
   init_x1   <- numeric() # x1の生成
