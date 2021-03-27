@@ -10,4 +10,4 @@
 ./quantumblack_causalnex/Pipfile
 ./quantumblack_causalnex/Pipfile.lock
 ./quantumblack_causalnex/sample_data/
-./quantumblack_causalnex/.vscode/
+./quantumblack_causalnex/.vscode
