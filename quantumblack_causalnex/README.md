@@ -34,3 +34,4 @@ pipenv install causalnex
 あとは`pipenv shell`で準備完了
 
 ## Let us try `causalnex`!
+詳細はソースコードに。
