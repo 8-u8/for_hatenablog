@@ -11,3 +11,4 @@
 ./quantumblack_causalnex/Pipfile.lock
 ./quantumblack_causalnex/sample_data/*csv
 ./quantumblack_causalnex/.vscode/
+*csv
