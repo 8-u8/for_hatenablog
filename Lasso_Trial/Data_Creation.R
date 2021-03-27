@@ -14,7 +14,7 @@ p=1
 for(i in 1:ncol(X)){
   # p <- runif(1)
   while(p >= 0.5){
-    set.seed(1234)
+    set.seed(1234) 
     p <- runif(1)
   }
   X[, i] <- rbinom(length(X[, i]), 1, p)
