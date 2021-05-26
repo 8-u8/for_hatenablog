@@ -1,25 +1,23 @@
-// くちばしの長さを翼の長さで回帰するモデル。
-// 翼の長さは種類で異なる。
-// 種類は多項分布に従うように持っていきたい。
+// stan code for penguins data.
+// single hierarchical regression model for study. model is below:
+// bill_length_mm ~ flipper_length_mm + (1 + flipper_length_mm | species)
 
 data{
-  int N; // データの数
-  int<lower=1> J; // グループの数(3？)
-  int<lower=0, upper=J> grp[N]; // 個体別のグループ
+  int N;                        // rows of data
+  int<lower=1> J;               // number of species
+  int<lower=0, upper=J> grp[N]; // species each individuals
   
-  int X[N]; // 説明変数
-  real y[N];  // 目的変数
+  real X[N];   // flipper_length_mm
+  real y[N];  // bill_length_mm
 }
 
 parameters{
-  // real a0;
-  // real b0;
+  /*non-negative constraint for intercept and coefficient*/
+  real<lower=0> a_ind; // intercept individuals
+  real<lower=0> b_ind; // coefficient individuals 
   
-  real a_ind;
-  real b_ind;
-  
-  real a_grp[J];
-  real b_grp[J];
+  real<lower=0> a_grp[J]; // intercept each groups(random effect)
+  real<lower=0> b_grp[J]; // coefficient each groups(random effect)
   
   real<lower=0> sigma_a;
   real<lower=0> sigma_b;
@@ -33,6 +31,11 @@ transformed parameters{
   real mu[N];
   
   for(j in 1:J){
+    /*
+    Because a_ind, a_grp, b_ind, and b_grp has 
+    non-negative constraint, a_all and b_all are 
+    also non-negative, theoretically...
+    */
     a_all[j] = a_ind + a_grp[j];
     b_all[j] = b_ind + b_grp[j];
   }
