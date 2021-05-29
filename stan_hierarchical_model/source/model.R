@@ -1,14 +1,19 @@
+# load libraries
 library(rstan)
 library(palmerpenguins)
 library(tidyverse)
 library(lme4)
 library(lmerTest)
 
+# stan code path
 stan_filepath <- "source/hierarchical_stan.stan"
 
+# define data
+# to simple, we omit NA rows.
 usedata <- penguins %>% 
   na.omit()
 
+# input info for data block in stan code.
 stan_params <- list(
   N = nrow(usedata),
   J = 3,
@@ -17,26 +22,36 @@ stan_params <- list(
   y = usedata$bill_length_mm
 )
 
-
+# model run
 stan_model <- rstan::stan(file = stan_filepath, data = stan_params, seed = 42,
                           iter = 10000, warmup = 1000, chains = 3)
-result <- summary(stan_model)$summary
 
+# glmm model run (for comparison)
 glmm_model <- lmerTest::lmer(bill_length_mm ~ flipper_length_mm + (1 + flipper_length_mm|species),
                              data = usedata)
 
-
+# fitted value output
 usedata$y_pred_glmm <- fitted(glmm_model)
+result <- summary(stan_model)$summary
 usedata$y_pred_beyes <- result[grep("y_pred", row.names(result)), "mean"]
 
+# visualization
 g <- ggplot2::ggplot(usedata, aes(x = flipper_length_mm, y = bill_length_mm))+
-     geom_point(aes(group = species, color = species)) + 
+     # scatter plot
+     geom_point(aes(group = species, color = species)) +
+     # hole regression
+     geom_smooth(method = "lm", se = F, color = "grey", formula = y~x) +
+     # single linear regression model for each species.
      geom_smooth(aes(group = species, color = species),
-                 method = "lm", se = F) + 
-     geom_smooth(aes(y = y_pred_glmm, color = species), linetype = "dashed") + 
+                 method = "lm", se = F, linetype= "dashed") + 
+     # fitted value from GLMM model.
+     geom_smooth(aes(y = y_pred_glmm, color = species)) + 
+     # generated value from hierarchical bayes model.
      geom_smooth(aes(y = y_pred_beyes, color = species), linetype = "twodash")
 
 plot(g)
 Date <- Sys.Date()
 graph_name <- paste0("output/",Date,"_plot_penguins_regression.png")
 ggsave(graph_name)
+
+saveRDS(stan_model, "./doc/stan_model.rds")

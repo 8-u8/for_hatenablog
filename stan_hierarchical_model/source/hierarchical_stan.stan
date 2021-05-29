@@ -7,17 +7,20 @@ data{
   int<lower=1> J;               // number of species
   int<lower=0, upper=J> grp[N]; // species each individuals
   
-  real X[N];   // flipper_length_mm
-  real y[N];  // bill_length_mm
+  real<lower=0> X[N];   // flipper_length_mm
+  real<lower=0> y[N];  // bill_length_mm
 }
 
 parameters{
+  // hyper prior dist parameters
+  // real a0;
+  // real b0;
   /*non-negative constraint for intercept and coefficient*/
-  real<lower=0> a_ind; // intercept individuals
-  real<lower=0> b_ind; // coefficient individuals 
+  real/*<lower=0>*/ a_ind; // intercept individuals
+  real/*<lower=0>*/ b_ind; // coefficient individuals 
   
-  real<lower=0> a_grp[J]; // intercept each groups(random effect)
-  real<lower=0> b_grp[J]; // coefficient each groups(random effect)
+  real/*<lower=0>*/ a_grp[J]; // intercept each groups(random effect)
+  real/*<lower=0>*/ b_grp[J]; // coefficient each groups(random effect)
   
   real<lower=0> sigma_a;
   real<lower=0> sigma_b;
