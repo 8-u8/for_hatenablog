@@ -4,6 +4,7 @@ library(palmerpenguins)
 library(tidyverse)
 library(lme4)
 library(lmerTest)
+options(bitmapType="cairo")
 
 # stan code path
 stan_filepath <- "source/hierarchical_stan.stan"
@@ -24,7 +25,7 @@ stan_params <- list(
 
 # model run
 stan_model <- rstan::stan(file = stan_filepath, data = stan_params, seed = 42,
-                          iter = 10000, warmup = 1000, chains = 3)
+                          iter = 1000, warmup = 100, chains = 3)
 
 # glmm model run (for comparison)
 glmm_model <- lmerTest::lmer(bill_length_mm ~ flipper_length_mm + (1 + flipper_length_mm|species),
