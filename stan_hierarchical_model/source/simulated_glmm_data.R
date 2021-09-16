@@ -4,8 +4,10 @@ options(bitmapType="cairo")
 # データ生成
 set.seed(42)
 # モデル構造。
+groups <- 5
+NperGrp <- 1000
 form <- y ~ 1 + X1 + X2 + (1+X2| grp)
-simulate_data <- lme4::mkDataTemplate(formula = form, nGrps = 5 , nPerGrp = 1000,
+simulate_data <- lme4::mkDataTemplate(formula = form, nGrps = groups , nPerGrp = NperGrp,
                                       rfunc = "rnorm", mean=0, sd = 0.4)
 
 # パラメータの箱を作る
@@ -32,8 +34,24 @@ summary(model3)
 model4 <- lme4::lmer(y$sim_1 ~ X1 + X2 + (1 + X2 | grp), data = simulate_data)
 summary(model4)
 
+# coef(): return coefficient each groups
+coef(model4)
+# ranef(): return random effect estimates each groups
+lme4::ranef(model4)
+
 anova(model4,model3,model2, model1)
 
+
+# coef() = ranef() + summary(model)$coefficient
+# let us calculate those effect for model4.
+coef_calc <- matrix(0,5,3)
+for(group in 1:groups){
+  coef_calc[group,] <- summary(model4)$coefficient[,1] + c(ranef(model4)$grp[group,1], 0, ranef(model4)$grp[group,2])
+}
+coef_calc
+
+#check: if all elements are zero, calculation above is correct.
+coef(model4)$grp-coef_calc
 
 simulate_data$lm_fitted <- fitted(model1)
 simulate_data$glmm_fitted <- fitted(model4)
