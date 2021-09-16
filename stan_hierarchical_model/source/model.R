@@ -6,6 +6,11 @@ library(lme4)
 library(lmerTest)
 options(bitmapType="cairo")
 
+# map estimator
+map <- function(z){ 
+  density(z)$x[which.max(density(z)$y)] 
+}
+
 # stan code path
 stan_filepath <- "source/hierarchical_stan.stan"
 
@@ -34,7 +39,9 @@ glmm_model <- lmerTest::lmer(bill_length_mm ~ flipper_length_mm + (1 + flipper_l
 # fitted value output
 usedata$y_pred_glmm <- fitted(glmm_model)
 result <- summary(stan_model)$summary
-usedata$y_pred_beyes <- result[grep("y_pred", row.names(result)), "mean"]
+y_pred <- result[grep("y_pred", row.names(result)),"mean"]
+# y_pred_map <- apply(y_pred, 1, map)
+usedata$y_pred_beyes <- y_pred#result[grep("y_pred", row.names(result)), "mean"]
 
 # visualization
 g <- ggplot2::ggplot(usedata, aes(x = flipper_length_mm, y = bill_length_mm))+
