@@ -4,8 +4,8 @@ options(bitmapType="cairo")
 # データ生成
 set.seed(42)
 # モデル構造。
-groups <- 5
-NperGrp <- 1000
+groups <- 3
+NperGrp <- 100
 form <- y ~ 1 + X1 + X2 + (1+X2| grp)
 simulate_data <- lme4::mkDataTemplate(formula = form, nGrps = groups , nPerGrp = NperGrp,
                                       rfunc = "rnorm", mean=0, sd = 0.4)
