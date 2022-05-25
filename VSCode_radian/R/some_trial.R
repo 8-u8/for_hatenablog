@@ -59,9 +59,9 @@ pred <- predFit(model,
 
 
 g <- ggplot2::ggplot(data = usedata, aes(x = X, y = Y)) + 
-    ggplot2::geom_point() +
+    ggplot2::geom_point(size=2, alpha = 0.6) +
     ggplot2::geom_ribbon(data = pred, aes(x = X, ymin = lwr, ymax = upr),
                          alpha = 0.5,fill = "grey70") + 
-    ggplot2::geom_line(data = pred, aes(x = X, y = fit), size = 2) 
+    ggplot2::geom_line(data = pred, aes(x = X, y = fit), size = 2, colour = "blue")
 g
 
