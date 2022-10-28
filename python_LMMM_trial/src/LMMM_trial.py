@@ -6,6 +6,7 @@ import jax.numpy as jnp
 from sklearn.metrics import mean_absolute_percentage_error
 
 from lightweight_mmm import preprocessing
+
 # from lightweight_mmm import utils
 from lightweight_mmm import lightweight_mmm
 from lightweight_mmm import plot
@@ -13,20 +14,24 @@ from lightweight_mmm import optimize_media
 
 # %% data loading functions
 # data from: https://www.kaggle.com/datasets/saicharansirangi/adanalyse
-usedata = pd.read_excel("../input/Sr_Advertising_Analyst_Work_Sample.xlsx")
+usedata = pd.read_excel(
+    "../input/Sr_Advertising_Analyst_Work_Sample.xlsx"
+)
 
 # %% data.chk
 print(usedata.head())
 
-# %%
+# %% data aggregation
 agg_data = usedata.groupby(["Date", "Ad group alias"])[
     ["Impressions", "Spend", "Sales"]].sum()
 agg_data = agg_data.drop(["Brand 1 Ad Group 12"], axis=0, level=1)
 
 # media impressions(response)
 media_data_raw = agg_data["Impressions"].unstack().fillna(0)
+
 # how many spend each media?
 costs_raw = agg_data["Spend"].unstack()
+
 # brand sales
 sales_raw = agg_data["Sales"].reset_index().groupby(["Date"]).sum()
 
@@ -35,100 +40,121 @@ print(media_data_raw)
 print(costs_raw)
 print(sales_raw)
 
+# %% transform data format
+media_data_jax = jnp.array(
+    media_data_raw.values
+)
+
+costs_jax = jnp.array(
+    costs_raw.values
+)
+
+sales_jax = jnp.array(
+    sales_raw.values
+)
+
+media_data_jax = jnp.nan_to_num(media_data_jax)
+cost_jax = jnp.nan_to_num(media_data_jax)
+sales_jax = jnp.nan_to_num(sales_jax)
+
+
 # %% train test split
-split_point = pd.Timestamp("2021-12-15")
-time_delta = pd.Timedelta(1, 'D')
+split_point = len(media_data_jax) - 20
 
-media_data_train = media_data_raw.loc[:split_point - time_delta]
-media_data_test = media_data_raw.loc[split_point:]
+media_data_train = media_data_jax[:split_point]
+media_data_test = media_data_jax[split_point:]
 
-target_train = sales_raw.loc[:split_point - time_delta]
-target_test = sales_raw.loc[split_point:]
+target_train = sales_jax[:split_point]
+target_test = sales_jax[split_point:]
 
-costs_train = costs_raw.loc[:split_point - time_delta].sum(axis=0).\
-    loc[media_data_train.columns]
+costs_train = cost_jax[:split_point].sum(axis=0)
+costs_test = cost_jax[split_point:].sum(axis=0)
+media_names = media_data_raw.columns
 
 # %% scaling
 media_scaler = preprocessing.CustomScaler(divide_operation=jnp.mean)
 target_scaler = preprocessing.CustomScaler(divide_operation=jnp.mean)
 costs_scaler = preprocessing.CustomScaler(divide_operation=jnp.mean)
 
-media_scaled_fit = media_scaler.fit(media_data_train.values)
-media_data_train_scaled = media_scaler.transform(media_data_train.values)
-target_train_scaled = target_scaler.fit_transform(target_train.values)
-costs_train_scaled = costs_scaler.fit_transform(costs_train.values)
+media_data_train = media_scaler.fit_transform(media_data_train)
+media_data_test = media_scaler.transform(media_data_test)
 
-media_data_test_scaled = media_scaler.transform(media_data_test.values)
-media_names = media_data_raw.columns
+target_train = target_scaler.fit_transform(target_train)
+target_test = target_scaler.transform(target_test)
+
+costs_train = costs_scaler.fit_transform(costs_train)
+cost_test = costs_scaler.transform(costs_test)
+
 # %% find best model
 # carryover model is slow.
-mmm_model_list = ["adstock", "hill_adstock", "carryover"]
+model_name = 'hill_adstock'
 degrees_season = [1, 2, 3]
 
-for model_name in mmm_model_list:
-    for degrees in degrees_season:
-        mmm = lightweight_mmm.LightweightMMM(model_name=model_name)
-        mmm.fit(
-            media=media_data_train_scaled,
-            media_prior=costs_train_scaled,
-            target=target_train_scaled,
-            number_warmup=1000,
-            number_samples=1000,
-            number_chains=1,
-            degrees_seasonality=degrees,
-            weekday_seasonality=True,
-            seasonality_frequency=365,
-            seed=42
-        )
-        pred = mmm.predict(
-            media=media_data_test_scaled,
-            target_scaler=target_scaler
-        )
-        p = pred.mean(axis=0)
+mmm = lightweight_mmm.LightweightMMM(model_name=model_name)
+mmm.fit(
+    media=media_data_train,
+    media_prior=costs_train,
+    target=target_train,
+    number_warmup=1000,
+    number_samples=1000,
+    number_chains=1,
+    # degrees_seasonality=degrees,
+    weekday_seasonality=True,
+    seasonality_frequency=365,
+    seed=42
+)
+pred = mmm.predict(
+    media=media_data_test,
+    target_scaler=target_scaler
+)
 
-        mape = mean_absolute_percentage_error(
-            target_test.values,
-            p
-        )
-        print(f"model_name: {model_name}, degrees={degrees}")
-        print(f"MAPE={mape}, samples={p[:3]}")
+# p = pred.mean(axis=0)
 
-# %%
-costs = costs_raw.sum(axis=0).loc[media_names]
-
-media_scaler2 = preprocessing.CustomScaler(divide_operation=jnp.mean)
-target_scaler2 = preprocessing.CustomScaler(
-    divide_operation=jnp.mean)
-cost_scaler2 = preprocessing.CustomScaler(divide_operation=jnp.mean)
-
-media_data_scaled = media_scaler2.fit_transform(media_data_raw.values)
-target_scaled = target_scaler2.fit_transform(sales_raw.values)
-costs_scaled2 = cost_scaler2.fit_transform(costs.values)
-
-media_names = media_data_raw.columns
-
-mmm = lightweight_mmm.LightweightMMM(model_name="hill_adstock")
-mmm.fit(media=media_data_scaled,
-        media_prior=costs_scaled2,
-        target=target_scaled,
-        number_warmup=1000,
-        number_samples=1000,
-        number_chains=1,
-        degrees_seasonality=1,
-        weekday_seasonality=True,
-        seasonality_frequency=365,
-        seed=1)
+# mape = mean_absolute_percentage_error(
+#     target_test.values,
+#     p
+# )
+# # print(f"model_name: {model_name}, degrees={degrees}")
+# print(f"MAPE={mape}, samples={p[:3]}")
 
 # %%
 media_effect_hat, roi_hat = mmm.get_posterior_metrics()
-plot.plot_bars_media_metrics(
-    metric=media_effect_hat, channel_names=media_names)
 
-# %%
-plot.plot_bars_media_metrics(metric=roi_hat, channel_names=media_names)
+# %% 1. accuracy
+plot.plot_model_fit(
+    media_mix_model=mmm,
+    target_scaler=target_scaler
+)
+
+# %% 2. media effect
+plot.plot_bars_media_metrics(
+    metric=media_effect_hat, channel_names=media_names
+)
+
+# %% 3. roi effect
+plot.plot_bars_media_metrics(
+    metric=roi_hat,
+    channel_names=media_names
+)
+
+# %% 4. media get_posterior
+plot.plot_media_channel_posteriors(
+    media_mix_model=mmm
+)
+
+# %% 5. response curve
+plot.plot_response_curves(
+    media_mix_model=mmm
+)
+
+# %% 6. plot contribution
+plot.plot_media_baseline_contribution_area_plot(
+    media_mix_model=mmm,
+    target_scaler=target_scaler
+)
 
 # %% media allocation.
-prices = costs / media_data_raw.sum(axis=0)
+prices = costs_test / media_data_raw.sum(axis=0)
 budget = 1  # your budget here
 solution = optimize_media.find_optimal_budgets(
     n_time_periods=1,
