@@ -15,7 +15,7 @@ from lightweight_mmm import optimize_media
 # %% data loading functions
 # data from: https://www.kaggle.com/datasets/saicharansirangi/adanalyse
 usedata = pd.read_excel(
-    "../input/Sr_Advertising_Analyst_Work_Sample.xlsx"
+    "../input/kaggle_ad_data.xlsx"
 )
 
 # %% data.chk
