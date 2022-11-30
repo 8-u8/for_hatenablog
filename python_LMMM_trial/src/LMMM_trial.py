@@ -144,7 +144,8 @@ plot.plot_media_channel_posteriors(
 
 # %% 5. response curve
 plot.plot_response_curves(
-    media_mix_model=mmm
+    media_mix_model=mmm,
+    figure_size=(20,30)
 )
 
 # %% 6. plot contribution
