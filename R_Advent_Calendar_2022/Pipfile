@@ -7,6 +7,11 @@ name = "pypi"
 prophet = "*"
 pandas = "*"
 numpy = "*"
+nevergrad = "*"
+colorama = "*"
+plotly = "*"
+seaborn = "*"
+matplotlib = "*"
 
 [dev-packages]
 

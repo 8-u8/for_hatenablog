@@ -1,3 +1,5 @@
+# issue: pipenvの仮想環境の導入が出来ていないんだよなあ。
+
 library(reticulate)
 library(Robyn)
 library(tidyverse)
@@ -6,6 +8,15 @@ library(readxl)
 
 source("./src/R_pipenv_link.R")
 
+
+# setup clean conda virtual environment
+pipenv_env <- system("pipenv --venv", intern = TRUE)
+pipenv_python <- paste0(pipenv_env, "/bin/python")
+Sys.setenv(RETICULATE_PYTHON = pipenv_python)
+use_virtualenv(virtualenv = pipenv_env, required = TRUE)
+virtualenv_install(pipenv_env, "nevergrad")
+
+use_python(pipenv_python, required = TRUE)
 # load data
 usedata <- readxl::read_excel("./input/kaggle_ad_data.xlsx")
 
@@ -14,6 +25,7 @@ usedata %>% head()
 usedata %>% summary()
 
 # data preparation
+# by robyn's reccomend, filter some ad variables.
 agg_data <- usedata %>%
     dplyr::mutate(Date = lubridate::ymd(Date)) %>% 
     dplyr::group_by(Date, `Ad group alias`) %>%
@@ -22,7 +34,25 @@ agg_data <- usedata %>%
         Spend = sum(Spend, na.rm = TRUE),
         Sales = sum(Sales, na.rm = TRUE)
     ) %>%
-    dplyr::filter(`Ad group alias` != "Brand 1 Ad Group 12")
+    dplyr::filter(
+        `Ad group alias` != "Brand 1 Ad Group 12" &
+        `Ad group alias` != 'Brand 1 Ad Group 10'&
+        `Ad group alias` != 'Brand 1 Ad Group 11'&
+        `Ad group alias` != 'Brand 1 Ad Group 3'&
+        `Ad group alias` != 'Brand 1 Ad Group 5'&
+        `Ad group alias` != 'Brand 1 Ad Group 7'& 
+        `Ad group alias` != 'Brand 1 Ad Group 8'&
+        `Ad group alias` != 'Brand 2 Ad Group 5'&
+        `Ad group alias` != 'Brand 2 Ad Group 6'&
+        `Ad group alias` != 'Brand 1 Ad Group 1' &
+        `Ad group alias` != 'Brand 1 Ad Group 13' &
+        `Ad group alias` != 'Brand 1 Ad Group 2' &
+        `Ad group alias` != 'Brand 1 Ad Group 6' &
+        `Ad group alias` != 'Brand 2 Ad Group 1' &
+        `Ad group alias` != 'Brand 2 Ad Group 2' &
+        `Ad group alias` != 'Brand 2 Ad Group 3' &
+        `Ad group alias` != 'Brand 2 Ad Group 4'
+        )
 
 agg_data %>% dim()
 
@@ -45,6 +75,7 @@ costs_data <- agg_data %>%
         values_from = "Spend",
         values_fill = 0
     )
+
 
 sales_target <- agg_data %>%
     dplyr::select(Date, `Ad group alias`, Sales) %>%
@@ -126,19 +157,16 @@ as.data.frame
 
 colnames(hyper_params) <- hyper_params_names
 hyper_params <- as.list(hyper_params)
-idx <- numeric(length(hyperparameter_names))
-for(i in 1:length(hyperparameter_names)){
-    tmp <- hyperparameter_names[i]
-    idx[i] <- grep(tmp, names(hyper_params))
-}
-hyper_params <- hyper_params[idx]
 
-InputCollection <- Robyn::robyn_inputs(
+# error not found, but not defined the hyperparameter.
+InputCollect <- Robyn::robyn_inputs(
     InputCollect = InputCollect,
     hyperparameters = hyper_params
 )
 
 print(InputCollect)
+
+
 # model fit
 OutputModels <- Robyn::robyn_run(
     InputCollect = InputCollect,
