@@ -10,13 +10,10 @@ source("./src/R_pipenv_link.R")
 
 
 # setup clean conda virtual environment
-pipenv_env <- system("pipenv --venv", intern = TRUE)
-pipenv_python <- paste0(pipenv_env, "/bin/python")
-Sys.setenv(RETICULATE_PYTHON = pipenv_python)
-use_virtualenv(virtualenv = pipenv_env, required = TRUE)
-virtualenv_install(pipenv_env, "nevergrad")
+virtualenv_create("r-reticulate")
+py_install("nevergrad", pip = TRUE)
+use_virtualenv("r-reticulate", required = TRUE)
 
-use_python(pipenv_python, required = TRUE)
 # load data
 usedata <- readxl::read_excel("./input/kaggle_ad_data.xlsx")
 
@@ -177,3 +174,34 @@ OutputModels <- Robyn::robyn_run(
 
 OutputModels$convergence$moo_distrb_plot
 OutputModels$convergence$moo_cloud_plot
+
+# output
+output_path <- "./output"
+OutputCollect <- Robyn::robyn_outputs(
+  InputCollect = InputCollect,
+  OutputModels = OutputModels,
+  csv_out = "pareto",
+  clusters = TRUE,
+  plot_pareto = TRUE,
+  plot_folder = output_path
+)
+print(OutputCollect)
+
+# allocation
+best_model <- "1_585_10"
+all_spend <- robyn_usedata %>% 
+  dplyr::ungroup() %>% 
+  dplyr::select(-Date, -Sales, -contains("Impressions")) %>% 
+  apply(., 1, sum) %>% sum
+
+AllocationCollect_01 <- Robyn::robyn_allocator(
+  InputCollect = InputCollect,
+  OutputCollect = OutputCollect,
+  select_model = best_model,
+  scenario = "max_historical_response",
+  channel_constr_low = 0.7,
+  export=TRUE,
+  date_min="2022-01-01",
+  date_max="2022-01-11"
+  
+)
