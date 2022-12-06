@@ -15,7 +15,6 @@
 仕事と個人的な道楽を兼ねて一時期勉強していたMarketing Mixed Modelについて、  
 そのコンセプトとMeta社の実装であるRobynをWalkthroughしようと思います。
 
-[https://github.com/facebookexperimental/Robyn:embed:cite]
 
 <!--more-->
 
@@ -129,12 +128,314 @@ Robynではhill関数、LightWeight MMMではcarryoverモデル、Adstockモデ�
 ここまでMMMのコンセプト部分について記述しました。  
 - RobynもLightWeight MMMも基本的には「回帰モデル」を仮定している
 - 広告投資効果には「投資効果逓減」を仮定している
-- 仮定に基づいて推論し、そこから複数の結果を得ることで、  
-総合的に意思決定を行う
+- 仮定に基づいて推論し、そこから複数の結果を得ることで、総合的に意思決定を行う
     - 場合によっては将来的な広告予算配分のシミュレーションも可能
 
+重要であるのは、MMMは広告と利益指標との間にある関係性についていくつかの仮定のもとでモデル化し、表現しているという点にあります。  
+このモデル自体はシンプルでありながら汎用的な「良いモデル」だと思っていて、  
+広告と利益指標との関係性は業種や商材によって一定程度共通する構造だとは思います。  
+一方で、パラメータの大小ではなく、モデルに用いている関数形が大きく異なることが想定される商品・サービスである場合、その構造をオリジナルで構築する必要があると思います。  
+RobynでMMMを構築する前に、基本的な集計や探索的な分析を行って、  
+Robynが想定するモデルで表現できそうか、少し検討したほうが良いかもしれません。
 
-# Robynとは
+# 実装
+
+## Robynとは
+RobynはMeta社がFacebookだった頃から開発しているMMMを楽に実行するためのOSSです。
+
+[https://github.com/facebookexperimental/Robyn:embed:cite]
+
+後述するように前処理や結果の可視化に至るまで「結果を出す」までがとても気楽にできるパッケージです。そしてRで実装されているという点が素晴らしい。  
+ドキュメントは関数の説明だけでなく[「アナリスト向けMMMガイド」](https://facebookexperimental.github.io/Robyn/docs/analysts-guide-to-MMM)という、上記のMMMに関する説明を数式を使わずに簡易に説明していて、モデリングを始める前の、データを収集するプロセスで気をつけるべきこととは何か、データのレビューをして確認するべきポイントは何かなど、大変丁寧な記載があるので、みんな読んだほうがいいと思います。  
+数式を理解しなくても誰でもMMMができるようにするという意味で、Robynはとても良いと思います。
+
+## データ
+kaggleにMMMをしやすそうなデータセットがあったので、こちらを援用します。
+[https://www.kaggle.com/datasets/saicharansirangi/adanalyse:embed:cite]
+
+日次時系列で、どこでどんな広告をどの程度のコストで打って、売上、インプレッションなどがどれだけ得られたのか、というデータが一通り揃っています。  
+今回はRobynでMMMを行う上で必要なデータに絞ってシンプルに実行するために
+- 売上(`Sales`)
+- 広告インプレッション(`Impressions`) 
+- 投資量(`Spend`)
+
+に絞って議論します。
+
+参考:[How To Create A Marketing Mix Model With LightweightMMM](https://forecastegy.com/posts/how-to-create-a-marketing-mix-model-with-lightweightmmm/)
+
+## 基本ステップ
+Robynは基本的に3つのステップを踏めば良い設計です。
+- `robyn_inputs`: データセットを読み込み、前処理を行う
+  - この段階で再度確認した方が良い変数などについては`warnings`が出てくれます。
+  - 前処理を行った上で、各種パラメータを推定する上でのハイパーパラメータを設定できます。
+- `robyn_run`: モデルの実行・パラメータの推定
+  - デフォルトでは5Chainくらいを回してくれます。そこそこ時間がかかる
+- `robyn_outputs`: 分析結果の出力
+  - これがすごい。モデルの分析結果についてフォルダが自動生成される。
+  - その中に`png`形式でのグラフと、`csv`形式での数表として出力される。
+  - 結果のグラフが散逸することなく、プロジェクトフォルダがきれいに使える点はとてもいい
+- `robyn_allocator`(オプション):シナリオを置いて、広告予算の最適化シミュレーションを行う。
+  - 大きく以下の2つのシナリオでシミュレーションができる
+  - 同じ広告予算であった場合により利益を上げることが期待できるようなメディア配分バランス
+  - 広告予算を与えた上で、利益を最大化するようなメディア配分バランス
+
+その他、新しくデータが入ったときのモデルのチューニングも割と簡単にできますが、今回は省略。
+
+## step1: `robyn_inputs`
+データの前処理部分から入ります。
+```r
+# loading packages
+library(reticulate)
+library(Robyn)
+library(tidyverse)
+library(readxl)
+
+# setup clean python virtual environment
+virtualenv_create("r-reticulate")
+py_install("nevergrad", pip = TRUE)
+use_virtualenv("r-reticulate", required = TRUE)
+
+# load data
+usedata <- readxl::read_excel("./input/kaggle_ad_data.xlsx")
+
+# check data
+usedata %>% head()
+usedata %>% summary()
+
+# data preparation
+agg_data <- usedata %>%
+  dplyr::mutate(Date = lubridate::ymd(Date)) %>% 
+  dplyr::group_by(Date, `Ad group alias`) %>%
+  dplyr::summarise(
+    Impressions = sum(Impressions, na.rm = TRUE),
+    Spend = sum(Spend, na.rm = TRUE),
+    Sales = sum(Sales, na.rm = TRUE)
+  ) %>%
+  dplyr::filter(
+    # これだけは投入を許してくれなかったので削除しています
+    `Ad group alias` != "Brand 1 Ad Group 12"
+  )
+
+agg_data %>% dim()
+>[1] 1411    5
+
+media_data <- agg_data %>%
+  dplyr::select(Date, `Ad group alias`, Impressions) %>%
+  tidyr::pivot_wider(
+    id_cols = "Date",
+    names_prefix = "Impressions_",
+    names_from = `Ad group alias`,
+    values_from = "Impressions",
+    values_fill = 0
+  )
+
+costs_data <- agg_data %>%
+  dplyr::select(Date, `Ad group alias`, Spend) %>%
+  tidyr::pivot_wider(
+    id_cols = "Date",
+    names_prefix = "Spend_",
+    names_from = `Ad group alias`,
+    values_from = "Spend",
+    values_fill = 0
+  )
+
+
+sales_target <- agg_data %>%
+  dplyr::select(Date, `Ad group alias`, Sales) %>%
+  dplyr::group_by(Date) %>% 
+  dplyr::summarise(
+    Sales = sum(Sales, na.rm = TRUE)
+  )
+
+colnames(media_data)[-1]  <- gsub(" ", "_", colnames(media_data)[-1])
+colnames(costs_data)[-1]  <- gsub(" ", "_", colnames(costs_data)[-1])
+
+media_col_names <- colnames(media_data)[-1]
+costs_col_names <- colnames(costs_data)[-1]
+
+robyn_usedata  <- media_data %>% 
+  dplyr::left_join(costs_data, by = "Date") %>% 
+  dplyr::left_join(sales_target, by = "Date")
+
+```
+Rがわかれば大体わかってくれると思います。本命は以下のコード。  
+`Robyn::robyn_inputs()`を使って、上記データをRobynに渡します。
+
+```r
+# make input data
+InputCollect  <- Robyn::robyn_inputs(
+  dt_input = robyn_usedata, # 使うデータフレーム
+  date_var = "Date",        # 日付の変数名
+  dep_var = "Sales",        # 目的変数
+  dep_var_type = "revenue", # 目的変数の属性(売上かコンバージョンか)
+  # prophetを用いた時系列のデコンポジション。
+  # holidayは省略しているが、日本の祝日はprophetから持ってくるために
+  # 少しPythonでスクリプトを組む必要がある
+  prophet_vars = c("trend", "season", "weekday"),
+  prophet_country = "US",
+  paid_media_spends = costs_col_names, # メディア投資変数
+  paid_media_vars = media_col_names,   # メディアのインプレッション
+  # メディア変数の係数の正負。基本は「正」で良いが、
+  # たとえば競合プロモーションや「炎上」があった項目は「負」扱い。
+  paid_media_signs = rep("positive", length(media_col_names)),
+  # 時系列の範囲を設定する。train-test splitなどはここでセッティングできそう
+  window_start = "2021-10-17",
+  window_end = "2022-01-11",
+  # 広告の「ラグ」のモデル指定。今回は計算スピードも兼ねてgeometric。
+  adstock = "geometric"
+)
+```
+ハイパーパラメータの調整も、一定程度ガイドがあります。  
+繰り返しのあるコードになっているのできれいではないのですが、  
+各ハイパーパラメータの探索範囲を定めています。
+
+```r
+# hyperparameter setup
+hyperparameter_names  <- Robyn::hyper_names(
+  adstock = InputCollect$adstock,
+  all_media = InputCollect$all_media
+)
+
+alpha_params <- hyperparameter_names[grep("_alphas", hyperparameter_names)]
+gamma_params <- hyperparameter_names[grep("_gammas", hyperparameter_names)]
+theta_params <- hyperparameter_names[grep("_thetas", hyperparameter_names)]
+
+alpha_params_from <- rep(0.5, length(alpha_params))
+gamma_params_from <- rep(0.3, length(gamma_params))
+theta_params_from <- rep(0, length(theta_params))
+
+alpha_params_to <- rep(3, length(alpha_params))
+gamma_params_to <- rep(1, length(gamma_params))
+theta_params_to <- rep(0.3, length(theta_params))
+
+hyper_params_names <- c(
+  alpha_params, 
+  gamma_params,
+  theta_params
+)
+
+hyper_params_from <- c(
+  alpha_params_from,
+  gamma_params_from,
+  theta_params_from
+)
+
+hyper_params_to <- c(
+  alpha_params_to,
+  gamma_params_to,
+  theta_params_to
+)
+
+hyper_params <- cbind(
+  hyper_params_from, 
+  hyper_params_to
+) %>% t %>% 
+  as.data.frame
+
+colnames(hyper_params) <- hyper_params_names
+hyper_params <- as.list(hyper_params)
+
+# error not found, but not defined the hyperparameter.
+InputCollect <- Robyn::robyn_inputs(
+  InputCollect = InputCollect,
+  hyperparameters = hyper_params
+)
+
+```
+
+今回は以下のような`warnings`が出ています。  
+データのチェック、前処理の段階でフィッティングを向上させるためにデータをsplitするか、  
+ImpressionではなくSpendを使うとかすることをオススメされます。  
+Robynに突っ込む前にデータレビューを行うことは前提ですが、その上でもこのようにレコメンドを返してくれるのはとても優しいですね。  
+これを出すために今回は悪いデータを入れている節もあります……。
+```r
+>> Running feature engineering...
+NOTE: potential improvement on splitting channels for better exposure fitting. Threshold (Minimum R2) = 0.8 
+  Check: InputCollect$plotNLSCollect outputs
+  Check data on: "Impressions_Brand_1_Ad_Group_10", "Impressions_Brand_1_Ad_Group_11", "Impressions_Brand_1_Ad_Group_3", "Impressions_Brand_1_Ad_Group_5", "Impressions_Brand_1_Ad_Group_7", "Impressions_Brand_1_Ad_Group_8", "Impressions_Brand_2_Ad_Group_5", "Impressions_Brand_2_Ad_Group_6"
+Warning messages:
+1: In .font_global(font, quiet = FALSE) :
+  Font 'Arial Narrow' is not installed, has other name, or can't be found
+2: In fit_spend_exposure(dt_spendModInput, mediaCostFactor[i], paid_media_vars[i]) :
+  Spend-exposure fitting for Impressions_Brand_1_Ad_Group_3 has rsq =  0.6488 To increase the fit, try splitting the variable. Otherwise consider using spend instead.
+3: In fit_spend_exposure(dt_spendModInput, mediaCostFactor[i], paid_media_vars[i]) :
+  Spend-exposure fitting for Impressions_Brand_1_Ad_Group_5 has rsq =  0.3885 To increase the fit, try splitting the variable. Otherwise consider using spend instead.
+4: In fit_spend_exposure(dt_spendModInput, mediaCostFactor[i], paid_media_vars[i]) :
+  Spend-exposure fitting for Impressions_Brand_1_Ad_Group_7 has rsq =  0.6573 To increase the fit, try splitting the variable. Otherwise consider using spend instead.
+5: In fit_spend_exposure(dt_spendModInput, mediaCostFactor[i], paid_media_vars[i]) :
+  Spend-exposure fitting for Impressions_Brand_2_Ad_Group_6 has rsq =  0.6145 To increase the fit, try splitting the variable. Otherwise consider using spend instead.
+6: In robyn_engineering(InputCollect, ...) :
+  R2 (nls): weak relationship for "Impressions_Brand_1_Ad_Group_1", "Impressions_Brand_1_Ad_Group_10", "Impressions_Brand_1_Ad_Group_11", "Impressions_Brand_1_Ad_Group_13", "Impressions_Brand_1_Ad_Group_2", "Impressions_Brand_1_Ad_Group_3", "Impressions_Brand_1_Ad_Group_5", "Impressions_Brand_1_Ad_Group_6", "Impressions_Brand_1_Ad_Group_7", "Impressions_Brand_1_Ad_Group_8", "Impressions_Brand_2_Ad_Group_1", "Impressions_Brand_2_Ad_Group_2", "Impressions_Brand_2_Ad_Group_3", "Impressions_Brand_2_Ad_Group_4", "Impressions_Brand_2_Ad_Group_5", "and Impressions_Brand_2_Ad_Group_6" and their spend
+7: In robyn_engineering(InputCollect, ...) :
+  R2 (lm): weak relationship for "Impressions_Brand_1_Ad_Group_10", "Impressions_Brand_1_Ad_Group_11", "Impressions_Brand_1_Ad_Group_3", "Impressions_Brand_1_Ad_Group_5", "Impressions_Brand_1_Ad_Group_7", "Impressions_Brand_1_Ad_Group_8", "Impressions_Brand_2_Ad_Group_5", "and Impressions_Brand_2_Ad_Group_6" and their spend
+```
+
+## step2: `robyn_run`
+Robynでの分析の実行は`Robyn::robyn_run`で出来ます。  
+上記の大量のオブジェクトを含む`InputCollect`を入れて、いくつかの設定を記載することで、  
+勝手に実行が可能です。  
+注意として、`robyn_run`では背後に`nevergrad`を使っているので、あらかじめ`reticulate`を通して仮想環境上にインストールしておく必要があるかもしれません。
+
+```r
+OutputModels <- Robyn::robyn_run(
+  InputCollect = InputCollect,
+  iterations = 15000,
+  trials = 5,
+  outputs = FALSE
+)
+
+OutputModels$convergence$moo_distrb_plot
+OutputModels$convergence$moo_cloud_plot
+```
+
+## step3: `robyn_outputs`
+`Robyn::robyn_outputs`を使うと、任意のフォルダに結果が一通り格納されます。すごい！
+```r
+output_path <- "./output"
+OutputCollect <- Robyn::robyn_outputs(
+  InputCollect = InputCollect,
+  OutputModels = OutputModels,
+  csv_out = "pareto",
+  clusters = TRUE,
+  plot_pareto = TRUE,
+  plot_folder = output_path
+)
+print(OutputCollect)
+
+```
+
+### 結果のグラフ
+出力結果については、Robyn側で「良い」と判定したモデルが２～３出てきますので、  
+その結果を見ながら、精度と実務上解釈できるかどうかを判断しながらモデルを選択します。  
+その意味で「モデルの選択指標」という形のものは明確には出ていません。  
+「精度はいいけど要因分解のバランスがヘン」「要因分解のバランスはいいけど精度がなあ」という部分で、人間として落とし所を探してくれ、というスタンスです。  
+まずはこの結果を見れば良い、というグラフはこちら。  
+<!-- 例の6グラフプロット -->
+今回は特定のモデルを選び、結果を眺めてみましょう。
+
+## additional: `robyn_allocator`
+```r
+# allocation
+best_model <- "1_585_10"
+all_spend <- robyn_usedata %>% 
+  dplyr::ungroup() %>% 
+  dplyr::select(-Date, -Sales, -contains("Impressions")) %>% 
+  apply(., 1, sum) %>% sum
+
+AllocationCollect_01 <- Robyn::robyn_allocator(
+  InputCollect = InputCollect,
+  OutputCollect = OutputCollect,
+  select_model = best_model,
+  scenario = "max_historical_response",
+  channel_constr_low = 0.7,
+  export=TRUE,
+  date_min="2022-01-01",
+  date_max="2022-01-11"
+  
+)
+
+```
+
 
 # ちなみに: LightWeight MMMやMaMiMo
 Robyn以外にMMMを実現するOSSとして、Googleの開発している[LightWeight MMMM](https://github.com/google/lightweight_mmm)があります。   
@@ -145,7 +446,9 @@ GoogleはMMMに対して、いくつか論文として発信しています。
 - [Challenges And Opportunities In Media Mix Modeling](https://static.googleusercontent.com/media/research.google.com/ja//pubs/archive/45998.pdf)
 - [Bayesian Methods for Media Mix Modeling with Carryover and Shape Effects](https://static.googleusercontent.com/media/research.google.com/ja//pubs/archive/46001.pdf)
 
-LightWeight MMMは基本的にPythonで実装されているので、**R** Advent Calendarであるこの記事では実装しませんが、以下で実装しています。
+LightWeight MMMは基本的にPythonで実装されていて、裏で`jax`が動いている都合上、Windowsでの実装はサポートされていません((WSL2を使うことによる実装は可能))。  
+**R** Advent Calendarであるこの記事では実装含めた解説をしません。  
+ただ、しれっとWalkthroughしているので、体力があればこちらも記事で紹介します。
 
 [https://github.com/8-u8/for_hatenablog/tree/master/python_LMMM_trial:embed:cite]
 
@@ -167,22 +470,3 @@ MMMは昨今注目されるモデルなので、いろいろな個人、法人�
 
 [https://devpost.com/software/test-iyn35s:embed:cite]
 
-# RobynによるMMMの実装
-
-## データ
-kaggleにMMMをしやすそうなデータセットがあったので、こちらを援用します。
-[https://www.kaggle.com/datasets/saicharansirangi/adanalyse:embed:cite]
-
-日次時系列で、どこでどんな広告をどの程度のコストで打って、売上、インプレッションなどがどれだけ得られたのか、というデータが一通り揃っています。  
-今回はRobynでMMMを行う上で必要なデータに絞ってシンプルに実行するために
-- 売上(`Sales`)
-- 広告インプレッション(`Impressions`) 
-- 投資量(`Spend`)
-
-に絞って議論します。
-
-参考:[How To Create A Marketing Mix Model With LightweightMMM](https://forecastegy.com/posts/how-to-create-a-marketing-mix-model-with-lightweightmmm/)
-
-
-
-#
