@@ -4,3 +4,4 @@ Pipfile.lock
 .RData
 ./output/*
 *.png
+./blog_article.md

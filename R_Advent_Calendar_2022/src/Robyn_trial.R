@@ -1,5 +1,4 @@
-# issue: pipenvの仮想環境の導入が出来ていないんだよなあ。
-
+# load packages
 library(reticulate)
 library(Robyn)
 library(tidyverse)
@@ -174,6 +173,8 @@ OutputModels <- Robyn::robyn_run(
 
 OutputModels$convergence$moo_distrb_plot
 OutputModels$convergence$moo_cloud_plot
+
+
 
 # output
 output_path <- "./output"
