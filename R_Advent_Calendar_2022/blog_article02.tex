@@ -1,0 +1,567 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, interior hidden, enhanced, sharp corners, frame hidden]}{\end{tcolorbox}}\fi
+
+\hypertarget{rux306bux80b2ux3066ux3089ux308cux3066rux3068ux751fux304dux3066ux3044ux308bux8a71}{%
+\section{Rに育てられて、Rと生きている話}\label{rux306bux80b2ux3066ux3089ux308cux3066rux3068ux751fux304dux3066ux3044ux308bux8a71}}
+
+\hypertarget{ux3053ux306eux8a18ux4e8bux306f}{%
+\subsection{この記事は}\label{ux3053ux306eux8a18ux4e8bux306f}}
+
+R Advent Calendar 2022の24日めの記事です。
+
+\hypertarget{rux306eux30b3ux30fcux30c9ux304cux51faux3066ux3053ux306aux3044advent-calendarux8a18ux4e8b}{%
+\subsection{Rのコードが出てこないAdvent
+Calendar記事}\label{rux306eux30b3ux30fcux30c9ux304cux51faux3066ux3053ux306aux3044advent-calendarux8a18ux4e8b}}
+
+今回はキャリアのお話でカレンダーを埋めようと思います。\\
+というのも、つい先週現職での最終出社日で、この1週間はこの後の人生にいくつあるかもわからない\\
+まとまったお休みの期間になっているのです。\\
+もちろん、次職へ提出するべき行政書類の準備とか、退職手続きとか、色々とありましたが、\\
+最悪どうにかならなくても死ぬことはない、という気持ちでどうにかしました。\\
+キャリアについては様々に悩み、スキルアップの機会を模索したり、勉強会でコネクションを増やしたり、\\
+色々と考えて来ましたが、R言語とは公私共にずっと使い続けています。\\
+卒論や修論もRで書いたので、かれこれ9年近く、R言語に人生を支えられてきました。\\
+そうなるとこの9年間、そうでなくてもRを使って仕事をしてきた4年半だけでも、\\
+Rを使ってどうキャリアを積み上げてきたのか、これからどう付き合っていくのかを記述しようと思います。
+
+\hypertarget{ux5927ux5b66ux5927ux5b66ux9662-ux6570ux7406ux30e2ux30c7ux30ebux7d71ux8a08ux30e2ux30c7ux30ebux3092rux3067ux7d44ux3080}{%
+\subsection{大学・大学院:
+数理モデル、統計モデルをRで組む}\label{ux5927ux5b66ux5927ux5b66ux9662-ux6570ux7406ux30e2ux30c7ux30ebux7d71ux8a08ux30e2ux30c7ux30ebux3092rux3067ux7d44ux3080}}
+
+学生時代の話は軽く。\\
+多分初めて出会った言語がRだったと思います。\\
+文系だとVBAとかRubyとか、そういうこともあると思うのですが、僕はR言語が最初でした。\\
+その次にLisp、その次にHaskell。結局これらはよくわからないままになってしまいましたが、\\
+Rは後に所属する研究室でも使われていて、一番長く付き合う言語になります((Haskellは数年後、\href{https://www.morikita.co.jp/books/mid/085471}{計算モデル}を学ぶ際に少し使いました))。
+卒論ではマルコフ連鎖モデルを「社会的排除」という社会現象に適用することを試してみました。\\
+数理社会学という学術領域では、社会現象を数学で記述して、現象の説明・予測を試みる研究が進められてきました。\\
+卒論は学外で報告していない(当時の自分は「本当にこれでいいのか？」とずっと思っていたので)のですが、\\
+モデルに基づくシミュレーションや図表をRで記述していました。
+
+修士論文では経済的な貧困の統計モデル化を進めました。貧困は近代以降最もメジャーな研究課題なので、\\
+新奇性を探ることは非常に困難でした。今思っても論文の意義を自信たっぷりに述べられそうにはないですが、\\
+離散時間ロジットモデルを応用した貧困の慢性化リスクについて研究しました。
+
+いずれにしても、当時はたいそう汚いコードで、前処理のデータも結果のファイルもすべて同じディレクトリに吐き出し、\\
+分析結果は上書きされるような始末でした。Rを使いこなせているという感覚のないまま、\\
+盛った経歴で今いる会社に内定をもらったときは怖かった記憶があります。\\
+それでもなんとか4年半は働けたので、どうにかなるもんだなあと思ったところです。
+
+\hypertarget{ux793eux4f1aux4eba1ux5e74ux76ee-excelux3068ux4e89ux3046}{%
+\subsection{社会人1年目:
+Excelと争う}\label{ux793eux4f1aux4eba1ux5e74ux76ee-excelux3068ux4e89ux3046}}
+
+\hypertarget{excelux3068ux306eux30e4ux30deux30a2ux30e9ux30b7ux306eux30b8ux30ecux30f3ux30de}{%
+\subsubsection{Excelとのヤマアラシのジレンマ}\label{excelux3068ux306eux30e4ux30deux30a2ux30e9ux30b7ux306eux30b8ux30ecux30f3ux30de}}
+
+入社して1ヶ月ほどは導入研修があり、スペックの低いPCでExcel以外を触れない状況でしたし、\\
+実際配属後の業務もExcelでの計算が大半でした。\\
+漠然と「Rのほうがよくできるのではないか、生産性が上がるのではないか」と思っていましたが、\\
+新人である自分は「非効率性」しか見えておらず「それで進めてきた実績」と\\
+「共通言語としてのExcelの優秀さ」を過小評価していたわけです。
+
+こうした争いを経て、今ではExcelとの適切な距離感がわかるようになってきました。\\
+ソフトウェアとしてこんなに汎用的なツールを作れるのはすごいのではないかと思っていますし、\\
+「表計算」という数学的な操作がどれだけ社会の価値になっているかを痛感しています。\\
+悪いのはExcelの汎用性に限界が見えておらず、明らかに限界である仕事すらExcelに委ねようとする人間側だったわけです。
+
+今の僕も、さすがにすべてをExcelに委ねるようなことはしないようにしていますが、\\
+Rで実装したいデータの処理についてプロトタイピングをするときはよく使います。\\
+Rの結果をテストするときにも使いますし、争わずに適切な場面で使えば十分であると思いました。\\
+そう、あくまで「適切な場面で」です。100,000行を超えるデータのマージだとか集計だとか、\\
+そういうのはExcelには荷が重いのです。そういうところになったらRに任せたほうが良いでしょう。\\
+もちろん、数億行のレベルになれば、そのときはデータベースの出番でもあります。
+
+\hypertarget{ux4f1aux793eux306eux7d44ux7e54ux4f53ux5236ux304cux5909ux308fux308bux3068ux3044ux3046ux7d4cux9a13}{%
+\subsubsection{会社の組織体制が変わるという経験}\label{ux4f1aux793eux306eux7d44ux7e54ux4f53ux5236ux304cux5909ux308fux308bux3068ux3044ux3046ux7d4cux9a13}}
+
+あまりしない経験ではあるのですが、入社半年後に役員がごっそり入れ替わった経験をしました。\\
+今となれば割とあることでは？とも思いますが、新人の僕にとってはめっちゃ面白いことだなと思った記憶があります。\\
+この段階で「会社を変えていく」という活動が、僕でもやりやすい環境に変わります。\\
+「会社を変える」という言葉には2通りの解釈ができて、まずは「別の会社で働く」という考え方が浮かびます。\\
+一方であまり意識されない、あるいは難しいことが「会社の文化・慣習を改めたり、新しいことを始めたりする」という解釈です。\\
+後述の通り、転職活動をしましたが、僕は昇給の交渉を通して、後者の「会社を変える」を選ぶことになります。
+
+\hypertarget{ux91d1ux6b32ux3057ux3055ux306eux8ee2ux8077}{%
+\subsubsection{金欲しさの転職}\label{ux91d1ux6b32ux3057ux3055ux306eux8ee2ux8077}}
+
+ともあれ当時の僕が、Rを使う機会が「想像していたより狭い」という感覚と、\\
+「RもPythonも使える自分が、この金額で働かせられているのはおかしい」という憤慨とが混じり合い、\\
+1年目で転職活動を進めていました。
+
+{[}https://socinuit.hatenablog.com/entry/2019/05/07/214632:embed:cite{]}
+
+noteにも「なんもわからん問題」という名目で何年か書いていた作品があります。
+
+{[}https://note.com/0\_u0/n/n601338a4dad8:embed:cite{]}
+
+実際、内定は2社出たし、報酬面ではかなり期待をしていただいていたところです。\\
+一方でこのときの転職活動は「やりたいこと」が特になく、普通に「他のデータ分析者と同じ給与が欲しい」みたいな\\
+理由で活動していたので、給与を上げる条件で遺留を申出されたときは日和りました。\\
+このときいろいろな人とお会いし、お話をしていたのですが「転職するのもいいけど、今いる会社の中身を変えることも、とてもいい経験だと思うよ」というアドバイスを頂く機会もありました。\\
+これは3年後、別の人からも受けるアドバイスになります。
+
+\hypertarget{ux4f59ux8ac7-ux30a8ux30fcux30b8ux30a7ux30f3ux30c8ux305dux3046ux3084ux3063ux3066ux306cux308bux307eux6e6fux306bux6d78ux304bux3063ux3066ux30adux30e3ux30eaux30a2ux3092ux7a4dux3081ux3070ux3044ux3044ux3067ux3059ux3088}{%
+\subsubsection{余談:
+エージェント「そうやってぬるま湯に浸かってキャリアを積めばいいですよ」}\label{ux4f59ux8ac7-ux30a8ux30fcux30b8ux30a7ux30f3ux30c8ux305dux3046ux3084ux3063ux3066ux306cux308bux307eux6e6fux306bux6d78ux304bux3063ux3066ux30adux30e3ux30eaux30a2ux3092ux7a4dux3081ux3070ux3044ux3044ux3067ux3059ux3088}}
+
+このときの転職活動はエージェントの運が本当に良くなかったのです。\\
+内定をもらってからの圧力は大変に大きく、結局内定を辞退して遺留するという意志を伝えたときには\\
+「いいですよ、内定先からの評価は伝えたほど高くないです」とか\\
+「そうやって、ぬるま湯につかってキャリアを積んでも市場価値高くならないので、後悔しないでくださいね」とか\\
+転職エージェントってそういうこと言うんだなあと思いながら電話を切った記憶があります。\\
+この経験から今でもエージェントに対する信頼はありません。
+
+\hypertarget{tokyorux3068ux306eux51faux4f1aux3044}{%
+\subsubsection{TokyoRとの出会い}\label{tokyorux3068ux306eux51faux4f1aux3044}}
+
+TokyoRは大学院の頃には知っていたのですが、当時は仙台に暮らしていて、SendaiRもなかったので、\\
+「仕事始めたらTokyoRに行くぞ！」と思っていました。\\
+最初は聞く専でしたが発表すると参加費無料みたいなのが当時はあったので、貧乏性な僕は\\
+タダ飯を食べるために毎月何かしらLTを持っていっていた記憶があります。\\
+今となっては動機が不純すぎますが、このときに知り合った方々とはTwitterでとても良くしてもらっています。
+
+\hypertarget{ux793eux4f1aux4eba2ux5e74ux76ee-rux306eux512aux4f4dux6027ux3068ux81eaux5206ux306eux30b9ux30adux30ebux4e0dux8db3}{%
+\subsection{社会人2年目:
+Rの優位性と自分のスキル不足}\label{ux793eux4f1aux4eba2ux5e74ux76ee-rux306eux512aux4f4dux6027ux3068ux81eaux5206ux306eux30b9ux30adux30ebux4e0dux8db3}}
+
+\hypertarget{ux5927ux898fux6a21ux3084ux3089ux304bux3057ux3068ux80ccux666fux306bux3042ux308bux30b9ux30adux30ebux4e0dux8db3}{%
+\subsubsection{大規模やらかしと背景にあるスキル不足}\label{ux5927ux898fux6a21ux3084ux3089ux304bux3057ux3068ux80ccux666fux306bux3042ux308bux30b9ux30adux30ebux4e0dux8db3}}
+
+こうして現職で会社を変える経験を重ねることを選んだ僕ですが、\\
+2年目にしてようやく「再現性」と「保守性」という壁にぶつかります。\\
+こんな言葉にしなくても別にいい、とても簡単なことではあるのですが、\\
+「同じコードを実行すれば同じ結果が得られる」ことや「自分以外の誰でも使いやすい状態にする」という配慮の\\
+一切ないコードが、過去のフォルダにはあったのです。\\
+RにはRprojectという機能があり、当時の僕もこれを使ってはいたものの、\\
+Windowsのドキュメントフォルダに乱立するプロジェクトフォルダと、その中は一切整理されていない様子でした。\\
+それに起因して現職の当時の取締役が謝罪するレベルの大きな失敗をしたのがこの頃だったなと思います。
+
+当時は僕以外では上司だけがまともにRを読み書きできる組織で、\\
+ペアプログラミングもコードレビューも一切ありませんでした。\\
+そもそもそういった慣習があることも知らなかったので、\\
+自分が書いたコードが正しく結果を出すことを信じる方法を講じていませんでした。\\
+結果自分が書いたコードの正しさを疑わず、間違った数字を提出し、\\
+誤った数字を使って提出先が意思決定をし、その後に計算の誤りが発覚するという、\\
+ビジネス上最悪に近いやらかし発見フローで事故の収拾に務めました。
+
+この失敗は自分が全くRを、データ分析プロジェクトを理解していないまま、\\
+ただ数字あそびをしていたということを明確に突きつけてきた痛い記憶だったりします。\\
+シンプルに自信を失ったし、シンプルに自分は無価値だなあとひどく落ち込んだ記憶があります。\\
+とはいえ、必要な経験が出来たとも思います。2度と経験したくはないですが、\\
+幸いとりあえず早めに謝ればいいということを学んだので、それも込みで良い経験をしたと思います。\\
+第一、Rを使っていなければ、後述する自分のコーディングの見直しを通して、\\
+いろいろな領域への関心をもつこともなかったと思います。
+
+\hypertarget{ux30d7ux30edux30b0ux30e9ux30dfux30f3ux30b0ux8a00ux8a9eux3068ux3057ux3066ux306erux3092ux52c9ux5f37ux3057ux76f4ux3059}{%
+\subsubsection{プログラミング言語としてのRを勉強し直す}\label{ux30d7ux30edux30b0ux30e9ux30dfux30f3ux30b0ux8a00ux8a9eux3068ux3057ux3066ux306erux3092ux52c9ux5f37ux3057ux76f4ux3059}}
+
+以降、RProjectを立ち上げるだけでなく、プロジェクト内部でのフォルダ構成やLinting、\\
+ドキュメンテーションまでの自動化などに力を入れてるようになりました。\\
+今となっては当たり前ですが、その当たり前が僕自身の慢心により出来ていませんでした。\\
+加えて、コードの中身も大きくスタイルを変更しました。\\
+変数名を具体的にしたり、1行あたりの文字数を少なくしたりと、\\
+これまでの自分が「ミスらないでしょｗ」と信頼していた要素一切を捨てました。\\
+結果、ここからデータ分析プロジェクト上のミスはほとんどしなくなったなあと思います。\\
+これまでの僕のRの理解は「強いExcel」扱いだったんだなという反省から、\\
+社内のプロジェクトではデータパイプラインをRで書き、手作業の余地を減らす努力をしていたなと思います。\\
+残念ながら抽象化が下手で、プロジェクト単位でパイプラインを組み立てる非効率な運用でしたが\ldots\ldots。
+
+こうした形でフォルダ内の構成を強く意識したものの、どういった構成が望まれているのかは、\\
+社内に明確な知見がなく、外部に探すほかありませんでした。\\
+当時は機械学習の領域で、パイプラインのライブラリの開発が盛んで、\\
+たとえば\texttt{kedro}のようなパイプラインOSSを使ってみて、フォルダ構成について勉強していた記憶があります。
+
+{[}https://socinuit.hatenablog.com/entry/2020/02/08/210423:embed:cite{]}
+
+\texttt{kedro}の開発はかなり進んでいるので、もしかすると上の内容はだいぶ古いかもしれないです。ご注意ください。
+
+この年は本当にプログラミング言語として、Rを見直していたなあと思います。
+
+\hypertarget{ux7d71ux8a08ux6570ux7406ux7814ux7a76ux6240ux30eaux30fcux30c7ux30a3ux30f3ux30b0dat}{%
+\subsubsection{統計数理研究所リーディングDAT}\label{ux7d71ux8a08ux6570ux7406ux7814ux7a76ux6240ux30eaux30fcux30c7ux30a3ux30f3ux30b0dat}}
+
+会社の予算で統計数理研究所のリーディングDAT養成コースを修了しました。\\
+自分が背伸びして理解できるギリギリを学ぶことが出来たのはとても良かったなと思っています。\\
+特に状態空間モデルの\texttt{KFAS}による実装については、後述するようにコロナ禍での時系列モデルの大きなヒントになりましたし、\\
+ベイズ縮小推定は、直近上手く実装できる場面を見つける事ができました。\\
+最先端ではないものの、統計学の数理的な要素をうまく仕事に活かす機会は、ここを経て少しずつ出てくることになります。\\
+今思えばかなり破格で、良い講義の場をいただけたなあと思っているところです。
+
+\hypertarget{ux793eux4f1aux4eba3ux5e74ux76ee-ux5f8cux8f29ux3068ux306eux4ed5ux4e8bux3068ux30b3ux30edux30ca}{%
+\subsection{社会人3年目:
+後輩との仕事とコロナ}\label{ux793eux4f1aux4eba3ux5e74ux76ee-ux5f8cux8f29ux3068ux306eux4ed5ux4e8bux3068ux30b3ux30edux30ca}}
+
+\hypertarget{ux30b3ux30edux30caux798dux306bux30c7ux30fcux30bfux3067ux5411ux304dux5408ux3046}{%
+\subsubsection{コロナ禍にデータで向き合う}\label{ux30b3ux30edux30caux798dux306bux30c7ux30fcux30bfux3067ux5411ux304dux5408ux3046}}
+
+2020年にはコロナ禍が始まりました。入社3年目か。キャリアの半分は在宅勤務なんですねえ。\\
+コロナ禍の感染者数推移がデイリーで更新されるというのは、行政がデータの蓄積と活用を\\
+積極的に進めた非常に良い取り組みだったように思います。\\
+データがあると分析してみたくなるのが性。今となっては当たり前な曜日と報告者数の規則性について、\\
+Rのレガシーなコーディングで書いたこともありました。
+{[}https://socinuit.hatenablog.com/entry/2020/03/31/194451:embed:cite{]}
+
+\hypertarget{ux5f8cux8f29ux306eux5165ux793eux3068r}{%
+\subsubsection{後輩の入社とR}\label{ux5f8cux8f29ux306eux5165ux793eux3068r}}
+
+この年には後輩が入社しました。データ分析職の採用に関わっていたときに、\\
+「最初のキャリアとして迷っている」と相談を受けて話をしたことがきっかけのようです。\\
+後輩ができ、その育成に際しては、エンジニアではないなりにいくつか妥協して、\\
+ペアプログラミングとコードレビューに力を入れたことでした。
+
+ここで後輩とやり取りしたことを通して、Rという言語と、それが目的とする「データの分析」は\\
+ソフトウェアエンジニアリング以外にも開かれていて、それがもたらす功罪について考える事になりました。\\
+たとえば以下のような記事に仕上げています。
+
+{[}https://socinuit.hatenablog.com/entry/2020/09/16/123811:embed:cite{]}
+
+つまり、Rは得意とする処理がエンジニア以外にも開かれた言語であり、\\
+その文法の易しさから、どんな人でもすぐに分析ができる強みがあります。これは素敵な仕様である一方、\\
+過去の僕がぶち当たったように、再現性や可読性、保守性のある開発指針というものに、\\
+明確な合意がないのではないか、というものです。\\
+2022年現在でも、\href{https://google.github.io/styleguide/Rguide.html}{Googleによるコーディングガイド}は知られていますが、\\
+Pythonでいうところのpepのように、ユーザの大半が合意するような規約があるわけではない認識です。\\
+細かなコーディング規約があることで参入障壁が上がるリスクはありつつも、\\
+プログラミング言語としてのRの強みに気づいたら、その段階で何かしらのコーディングガイドに従った記述を心がけたほうが良いとは、今でも思います。
+
+嬉しい誤算は、後輩はこのあたりのリテラシーを多少心得ていたことで、\\
+僕がやったような大きなやらかしはほとんどなかったことです。\\
+裏を返せば、僕は後輩に教えることはそんなに多くなかった、ということでもあるんですが。
+
+コロナ禍の中では僕の働く業界は大きな影響を受けていました。それもいい方向に。\\
+SARIMAモデルを作ったり、Causal Impactを試してみたりと、\\
+クライアントの戦略再構築に関わることが出来たのは割とタイミングが良かったな、とも思います。
+
+\hypertarget{ux4ed5ux4e8bux3060ux3051ux304cux4ebaux751fux3067ux306aux3044ux3068ux6c17ux3065ux304f}{%
+\subsubsection{仕事だけが人生でないと気づく}\label{ux4ed5ux4e8bux3060ux3051ux304cux4ebaux751fux3067ux306aux3044ux3068ux6c17ux3065ux304f}}
+
+年の後半は生産性を上げすぎてメンタルヘルスが追いつかなくなりました。\\
+RやPythonで生産性を高めすぎて体が持たなくなった感じです。
+
+\hypertarget{ux793eux4f1aux4eba4ux5e74ux76ee-ux30deux30cdux30fcux30b8ux30e3ux30fcux521dux5fc3ux8005ux3068ux4ebaux4e8bux6226ux7565}{%
+\subsection{社会人4年目:
+マネージャー初心者と人事戦略}\label{ux793eux4f1aux4eba4ux5e74ux76ee-ux30deux30cdux30fcux30b8ux30e3ux30fcux521dux5fc3ux8005ux3068ux4ebaux4e8bux6226ux7565}}
+
+2021年にRを積極的に書いた記憶があまりないのですが、よく考えたらTokyoRにもJapanRにも参加していませんでした。\\
+Rに関する知識獲得を一切していなかったのです。
+
+\hypertarget{ux8a08ux7b97ux57faux76e4ux3084ux74b0ux5883ux69cbux7bc9ux306bux5411ux304dux5408ux3046}{%
+\subsubsection{計算基盤や環境構築に向き合う}\label{ux8a08ux7b97ux57faux76e4ux3084ux74b0ux5883ux69cbux7bc9ux306bux5411ux304dux5408ux3046}}
+
+AWSの環境構築やネットワークセキュリティに関する仕事に(なぜか)向き合うことになったり、\\
+管理職になったのもこの年でした。\\
+計算基盤については本当に何一つバックグラウンドがなかったので、TCP/IPの基本的な事項から勉強して、\\
+仕事で無視してはいけない要素を社内のSEと議論しながら基盤構築のお手伝いをしていました。\\
+僕の仕事はデータ分析だったはずなんですが、シェルを書いたりSSH接続したり、別のことをやっていた用に思います。\\
+それはそれで楽しかったので、今は良い機会だったと思っています。
+
+\hypertarget{ux63a1ux7528ux4ebaux4e8bux306eux8003ux3048ux306bux89e6ux308cux308b}{%
+\subsubsection{採用/人事の考えに触れる}\label{ux63a1ux7528ux4ebaux4e8bux306eux8003ux3048ux306bux89e6ux308cux308b}}
+
+コロナ禍を経て、会社の経営体制についても社員が主体的に参加できるよう、\\
+いくつかの社内プロジェクトが立てられ、それに参加していました。\\
+特に人事領域でのデータ活用に関するマネジメントや、データ分析人材要件の定義に関わりました。\\
+ここで気づいた、もといそうだと知っていたものの実感として得られた経験には、\\
+「理想の環境」も「理想の人材」も、結局は理想でしかないということでした。\\
+データでわかる結果はこれまでやってきた仕事よりも生々しく、会社の課題を明確に示すのでした。\\
+これが正直すごく面白かったので、社内の取り組み、ひいては「事業会社の面白さ」にも\\
+少し触れることが出来たなと思います。
+
+\hypertarget{rux3067ux65b0ux3057ux3044ux3053ux3068ux3092ux3084ux308bux6a5fux4f1aux304cux6e1bux308aux5b9fux9a13ux306eux6a5fux4f1aux304cux5897ux3048ux308b}{%
+\subsubsection{Rで新しいことをやる機会が減り、実験の機会が増える}\label{rux3067ux65b0ux3057ux3044ux3053ux3068ux3092ux3084ux308bux6a5fux4f1aux304cux6e1bux308aux5b9fux9a13ux306eux6a5fux4f1aux304cux5897ux3048ux308b}}
+
+簡単な集計・分析はRでほとんど自動化してしまい、仕事で新しくRのコードを書く場面は減りました。\\
+その代わり管理職に就いたことで、任意の自主研究の時間を設定して「仕事で使うかよくわからないけどとりあえず作ってみるか」\\
+というような実験のためにRを使っていました。\\
+その多くは仕事に使うことはあんまりなかったですが、コードの中身を深く読み込む経験をしたのは、\\
+ある程度勉強となったところです。\\
+たとえばコレスポンデンス分析のお話は僕も社内で検討するために、以下の記事などを参照しながら、\\
+Rのコードを読み込んで報告しました。\\
+{[}https://bob3.hatenablog.com/entry/2022/01/15/123412:embed:cite{]}
+
+\hypertarget{ux30c7ux30fcux30bfux5206ux6790ux306eux6c11ux4e3bux5316ux306bux95a2ux308fux308b}{%
+\subsubsection{データ分析の民主化に関わる}\label{ux30c7ux30fcux30bfux5206ux6790ux306eux6c11ux4e3bux5316ux306bux95a2ux308fux308b}}
+
+会社でデータ分析のWebアプリが開発されたので、それを使って他部門でのデータ分析の民主化に関わりました。\\
+結果思った通りに民主化は進まなかったのですが、なぜ進まなかったのかについて根深く、解決しがいのある\\
+組織課題を見つけることができたので、それはそれで次に繋がるなあと思いました。\\
+とはいえ他の企業と比較して、会社がこれまで積み上げてきた文化・慣習・制度による制約が強く存在し、\\
+そこをどう打開するべきかは、普通に経営目線での議論が必要でした。\\
+結果、経営陣とのディスカッションも重ねる機会を得られたことは、他社で言えばちっぽけな問題であったとしても、\\
+面白い機会をいただけたなと思います。
+
+\hypertarget{ux30e1ux30f3ux30bfux30ebux306eux69d8ux5b50ux3092ux898bux306aux304cux3089ux8ee2ux8077ux6d3bux52d5ux3092ux8003ux3048ux308b}{%
+\subsubsection{メンタルの様子を見ながら転職活動を考える}\label{ux30e1ux30f3ux30bfux30ebux306eux69d8ux5b50ux3092ux898bux306aux304cux3089ux8ee2ux8077ux6d3bux52d5ux3092ux8003ux3048ux308b}}
+
+少しずつ自分が手を動かす余地が減り、Rで新しい分析を考える場面も減っていくと、\\
+多少刺激が欲しくなるものでした。\\
+メンタルをやっているので、自分なりに制限しながらではありますが、\\
+2021年の後半はカジュアル面談をひっそり受けていました。\\
+その際に、ある会社の役員の方に「今の会社でやりきったと思えるまでやるのもいいよ」と言われて、\\
+3年前に聞いたそれ！ってなりました。\\
+1社、最終面接まで行った会社はありましたが、やりきった感があんまりなかったので、\\
+とりあえず辞退し、どこまでやれば「やりきった」と思えるのかを模索しようと考えたところです。
+
+\hypertarget{ux793eux4f1aux4eba5ux5e74ux76ee-ux30b9ux30e2ux30fcux30ebux30c1ux30fcux30e0ux306eux30deux30cdux30b8ux30e1ux30f3ux30c8ux3068ux8ee2ux8077}{%
+\subsection{社会人5年目:
+スモールチームのマネジメントと転職}\label{ux793eux4f1aux4eba5ux5e74ux76ee-ux30b9ux30e2ux30fcux30ebux30c1ux30fcux30e0ux306eux30deux30cdux30b8ux30e1ux30f3ux30c8ux3068ux8ee2ux8077}}
+
+\hypertarget{ux3084ux308aux304dux3063ux305fux611fux306eux5b9aux7fa9}{%
+\subsubsection{やりきった感の定義}\label{ux3084ux308aux304dux3063ux305fux611fux306eux5b9aux7fa9}}
+
+この年の4月から、なんとなく「今年いっぱいで区切りがつくかな」と思っていました。\\
+新しいメンバーを迎え入れ、計画より早くRを実務応用可能なレベルで習得いただき、\\
+案件を少しずつ移譲していきました。大体は自動化していたので、あとは動作原理が分かれば使えるレベルでした。\\
+社内プロジェクトもメンバー主導で動くことを確認し、いよいよ自分の仕事はなくなったし、\\
+新しい仕事も、多分配下のメンバーでよしなに動くだろう、という見通しも立ったところで、\\
+今の会社でやれることはやりきったな、と思いました。
+
+結局のところ、会社のどんな部分を変えることに関われたかはよくわかりませんが、\\
+少なくともデータ分析の民主化による社員のデータ分析への意識付けや、実践に向けた課題については、\\
+会社単位で動いているので、ここに関わり意識転換を促せたことが、一つあるかなあと思っているところです。
+
+\hypertarget{ux8ee2ux8077ux6d3bux52d5}{%
+\subsubsection{転職活動}\label{ux8ee2ux8077ux6d3bux52d5}}
+
+転職活動ではいくつかエージェントと面談をしました。信頼していないとはいえ、\\
+とりあえず情報だけはもらおうと思ったことが理由です。\\
+4年前に比べて信頼に足るエージェントには巡り会えましたが、複数の企業への面接をこなす体力はなく、\\
+結局自分からアプローチした会社の選考に臨みました。\\
+結果2社からオファーを頂き、色々考慮して、次職を選びました。
+
+\hypertarget{ux9000ux8077ux4ea4ux6e09}{%
+\subsubsection{退職交渉}\label{ux9000ux8077ux4ea4ux6e09}}
+
+今回は金の問題ではなく、今の会社でやれることはやったという達成感のもとで辞めるので、\\
+正直どんな条件を向けられてもあまり意志は変わらないなと思いました。\\
+役員にも「どうにか留める条件を考えたんだけど、見つかんないわ！」って言われたので、\\
+「だよなｗ」って思いました。役員には色々とお世話になっている信頼関係があるので、\\
+こういった会話が出来ています。\\
+そういうことで年末で転職します。
+
+\hypertarget{rux3068ux5f97ux305fux77e5ux898b}{%
+\subsection{Rと得た知見}\label{rux3068ux5f97ux305fux77e5ux898b}}
+
+長ったらしく書くのが僕の特技なので、この4年半でRを通して得られた知見を列挙しておきます
+
+\begin{itemize}
+\tightlist
+\item
+  Rでキャリアを積み上げ、Rの経験を評価され、Rの実力で転職した
+\item
+  Rはプログラミング言語である
+
+  \begin{itemize}
+  \tightlist
+  \item
+    集計や統計解析でアドホックに使う以外のことを思いつくと一気に広がる
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Rで変なものを作る経験はすごくいい
+    \end{itemize}
+  \end{itemize}
+\item
+  R以外のプログラミング言語に触れる
+
+  \begin{itemize}
+  \tightlist
+  \item
+    書いてないけどC++やCやRustやPythonに触れた。
+  \item
+    R以外のプログラミング言語を知るだけでRの凄さや怖さがわかる
+  \end{itemize}
+\item
+  Rの適用対象を広げる。
+
+  \begin{itemize}
+  \tightlist
+  \item
+    自分の主事業とは別の領域での使われ方を知ると、\\
+    有意義な応用可能性が見つかるかもしれない
+  \end{itemize}
+\item
+  仕事でRを使うことに加え、Rでできる仕事を定義するのも大事
+
+  \begin{itemize}
+  \tightlist
+  \item
+    実際「Rで縛ってプロジェクトを進める」ということは、エラーやリスクマネジメントを含め\\
+    メンバーの生産性を高めることにつながった
+  \item
+    Excelでできることを大規模にやるならRが向いているのでそういう仕事を探す。
+  \end{itemize}
+\item
+  Rユーザとのつながりを大切にすると長期的にすごくいい
+
+  \begin{itemize}
+  \tightlist
+  \item
+    転職先の決め手は「TokyoRで知り合った友人が働いていること」だった
+  \item
+    TokyoRやJapanRで知ったことが仕事にすぐつながる
+  \item
+    良くしてもらっている方から献本をもらうなど、幸運もあった。
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{ux5e74ux76eeux4ee5ux964dux3068ux3053ux308cux304bux3089}{%
+\subsection{6年目以降とこれから}\label{ux5e74ux76eeux4ee5ux964dux3068ux3053ux308cux304bux3089}}
+
+少なくとも2023年もRで事業貢献をする予定です。\\
+Pythonを指定されてもRを書くと思います。\\
+ただ、Rに閉じるわけではなく、たとえばC++やRustで高速に計算できるモデルを作成して、\\
+Rで分析を実施するみたいな動きも含めてチャレンジできたらいいなとは思っています。\\
+加えて広く存在する統計理論の理解を深めるために、今よりもRと仲良くなれるといいなと思っています。
+
+
+
+\end{document}
