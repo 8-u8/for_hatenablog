@@ -18,7 +18,9 @@ mroz_usedata <- mroz_rawdata %>%
 psych::cor.plot(mroz_usedata)
 
 # 普通の重回帰
-lm_model <- lm(log(wage) ~ educ + fatheduc + motheduc, data = mroz_usedata)
+lm_model <- lm(
+  log(wage) ~ educ + fatheduc + motheduc,
+  data = mroz_usedata)
 
 
 # 設定：操作変数としてfatheduc/motheducを採用する
@@ -46,6 +48,7 @@ IIV_model <- REndo::latentIV(
   )
 
 summary(lm_model)
+summary(tls_first)
 summary(tls_second)
 gmm_fit
 summary(IIV_model)
