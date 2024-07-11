@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>blog_article02</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="blog_article02_files/libs/clipboard/clipboard.min.js"></script>
+<script src="blog_article02_files/libs/quarto-html/quarto.js"></script>
+<script src="blog_article02_files/libs/quarto-html/popper.min.js"></script>
+<script src="blog_article02_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="blog_article02_files/libs/quarto-html/anchor.min.js"></script>
+<link href="blog_article02_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="blog_article02_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="blog_article02_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="blog_article02_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="blog_article02_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="rに育てられてrと生きている話" class="level1">
+<h1>Rに育てられて、Rと生きている話</h1>
+<section id="この記事は" class="level2">
+<h2 class="anchored" data-anchor-id="この記事は">この記事は</h2>
+<p>R Advent Calendar 2022の24日めの記事です。</p>
+</section>
+<section id="rのコードが出てこないadvent-calendar記事" class="level2">
+<h2 class="anchored" data-anchor-id="rのコードが出てこないadvent-calendar記事">Rのコードが出てこないAdvent Calendar記事</h2>
+<p>今回はキャリアのお話でカレンダーを埋めようと思います。<br>
+というのも、つい先週現職での最終出社日で、この1週間はこの後の人生にいくつあるかもわからない<br>
+まとまったお休みの期間になっているのです。<br>
+もちろん、次職へ提出するべき行政書類の準備とか、退職手続きとか、色々とありましたが、<br>
+最悪どうにかならなくても死ぬことはない、という気持ちでどうにかしました。<br>
+キャリアについては様々に悩み、スキルアップの機会を模索したり、勉強会でコネクションを増やしたり、<br>
+色々と考えて来ましたが、R言語とは公私共にずっと使い続けています。<br>
+卒論や修論もRで書いたので、かれこれ9年近く、R言語に人生を支えられてきました。<br>
+そうなるとこの9年間、そうでなくてもRを使って仕事をしてきた4年半だけでも、<br>
+Rを使ってどうキャリアを積み上げてきたのか、これからどう付き合っていくのかを記述しようと思います。</p>
+<!-- more -->
+</section>
+<section id="大学大学院-数理モデル統計モデルをrで組む" class="level2">
+<h2 class="anchored" data-anchor-id="大学大学院-数理モデル統計モデルをrで組む">大学・大学院: 数理モデル、統計モデルをRで組む</h2>
+<p>学生時代の話は軽く。<br>
+多分初めて出会った言語がRだったと思います。<br>
+文系だとVBAとかRubyとか、そういうこともあると思うのですが、僕はR言語が最初でした。<br>
+その次にLisp、その次にHaskell。結局これらはよくわからないままになってしまいましたが、<br>
+Rは後に所属する研究室でも使われていて、一番長く付き合う言語になります((Haskellは数年後、<a href="https://www.morikita.co.jp/books/mid/085471">計算モデル</a>を学ぶ際に少し使いました))。 卒論ではマルコフ連鎖モデルを「社会的排除」という社会現象に適用することを試してみました。<br>
+数理社会学という学術領域では、社会現象を数学で記述して、現象の説明・予測を試みる研究が進められてきました。<br>
+卒論は学外で報告していない(当時の自分は「本当にこれでいいのか？」とずっと思っていたので)のですが、<br>
+モデルに基づくシミュレーションや図表をRで記述していました。</p>
+<p>修士論文では経済的な貧困の統計モデル化を進めました。貧困は近代以降最もメジャーな研究課題なので、<br>
+新奇性を探ることは非常に困難でした。今思っても論文の意義を自信たっぷりに述べられそうにはないですが、<br>
+離散時間ロジットモデルを応用した貧困の慢性化リスクについて研究しました。</p>
+<p>いずれにしても、当時はたいそう汚いコードで、前処理のデータも結果のファイルもすべて同じディレクトリに吐き出し、<br>
+分析結果は上書きされるような始末でした。Rを使いこなせているという感覚のないまま、<br>
+盛った経歴で今いる会社に内定をもらったときは怖かった記憶があります。<br>
+それでもなんとか4年半は働けたので、どうにかなるもんだなあと思ったところです。</p>
+</section>
+<section id="社会人1年目-excelと争う" class="level2">
+<h2 class="anchored" data-anchor-id="社会人1年目-excelと争う">社会人1年目: Excelと争う</h2>
+<!-- 2018年 -->
+<section id="excelとのヤマアラシのジレンマ" class="level3">
+<h3 class="anchored" data-anchor-id="excelとのヤマアラシのジレンマ">Excelとのヤマアラシのジレンマ</h3>
+<p>入社して1ヶ月ほどは導入研修があり、スペックの低いPCでExcel以外を触れない状況でしたし、<br>
+実際配属後の業務もExcelでの計算が大半でした。<br>
+漠然と「Rのほうがよくできるのではないか、生産性が上がるのではないか」と思っていましたが、<br>
+新人である自分は「非効率性」しか見えておらず「それで進めてきた実績」と<br>
+「共通言語としてのExcelの優秀さ」を過小評価していたわけです。</p>
+<p>こうした争いを経て、今ではExcelとの適切な距離感がわかるようになってきました。<br>
+ソフトウェアとしてこんなに汎用的なツールを作れるのはすごいのではないかと思っていますし、<br>
+「表計算」という数学的な操作がどれだけ社会の価値になっているかを痛感しています。<br>
+悪いのはExcelの汎用性に限界が見えておらず、明らかに限界である仕事すらExcelに委ねようとする人間側だったわけです。</p>
+<p>今の僕も、さすがにすべてをExcelに委ねるようなことはしないようにしていますが、<br>
+Rで実装したいデータの処理についてプロトタイピングをするときはよく使います。<br>
+Rの結果をテストするときにも使いますし、争わずに適切な場面で使えば十分であると思いました。<br>
+そう、あくまで「適切な場面で」です。100,000行を超えるデータのマージだとか集計だとか、<br>
+そういうのはExcelには荷が重いのです。そういうところになったらRに任せたほうが良いでしょう。<br>
+もちろん、数億行のレベルになれば、そのときはデータベースの出番でもあります。</p>
+</section>
+<section id="会社の組織体制が変わるという経験" class="level3">
+<h3 class="anchored" data-anchor-id="会社の組織体制が変わるという経験">会社の組織体制が変わるという経験</h3>
+<p>あまりしない経験ではあるのですが、入社半年後に役員がごっそり入れ替わった経験をしました。<br>
+今となれば割とあることでは？とも思いますが、新人の僕にとってはめっちゃ面白いことだなと思った記憶があります。<br>
+この段階で「会社を変えていく」という活動が、僕でもやりやすい環境に変わります。<br>
+「会社を変える」という言葉には2通りの解釈ができて、まずは「別の会社で働く」という考え方が浮かびます。<br>
+一方であまり意識されない、あるいは難しいことが「会社の文化・慣習を改めたり、新しいことを始めたりする」という解釈です。<br>
+後述の通り、転職活動をしましたが、僕は昇給の交渉を通して、後者の「会社を変える」を選ぶことになります。</p>
+</section>
+<section id="金欲しさの転職" class="level3">
+<h3 class="anchored" data-anchor-id="金欲しさの転職">金欲しさの転職</h3>
+<p>ともあれ当時の僕が、Rを使う機会が「想像していたより狭い」という感覚と、<br>
+「RもPythonも使える自分が、この金額で働かせられているのはおかしい」という憤慨とが混じり合い、<br>
+1年目で転職活動を進めていました。</p>
+<p>[https://socinuit.hatenablog.com/entry/2019/05/07/214632:embed:cite]</p>
+<p>noteにも「なんもわからん問題」という名目で何年か書いていた作品があります。</p>
+<p>[https://note.com/0_u0/n/n601338a4dad8:embed:cite]</p>
+<p>実際、内定は2社出たし、報酬面ではかなり期待をしていただいていたところです。<br>
+一方でこのときの転職活動は「やりたいこと」が特になく、普通に「他のデータ分析者と同じ給与が欲しい」みたいな<br>
+理由で活動していたので、給与を上げる条件で遺留を申出されたときは日和りました。<br>
+このときいろいろな人とお会いし、お話をしていたのですが「転職するのもいいけど、今いる会社の中身を変えることも、とてもいい経験だと思うよ」というアドバイスを頂く機会もありました。<br>
+これは3年後、別の人からも受けるアドバイスになります。</p>
+</section>
+<section id="余談-エージェントそうやってぬるま湯に浸かってキャリアを積めばいいですよ" class="level3">
+<h3 class="anchored" data-anchor-id="余談-エージェントそうやってぬるま湯に浸かってキャリアを積めばいいですよ">余談: エージェント「そうやってぬるま湯に浸かってキャリアを積めばいいですよ」</h3>
+<p>このときの転職活動はエージェントの運が本当に良くなかったのです。<br>
+内定をもらってからの圧力は大変に大きく、結局内定を辞退して遺留するという意志を伝えたときには<br>
+「いいですよ、内定先からの評価は伝えたほど高くないです」とか<br>
+「そうやって、ぬるま湯につかってキャリアを積んでも市場価値高くならないので、後悔しないでくださいね」とか<br>
+転職エージェントってそういうこと言うんだなあと思いながら電話を切った記憶があります。<br>
+この経験から今でもエージェントに対する信頼はありません。</p>
+</section>
+<section id="tokyorとの出会い" class="level3">
+<h3 class="anchored" data-anchor-id="tokyorとの出会い">TokyoRとの出会い</h3>
+<p>TokyoRは大学院の頃には知っていたのですが、当時は仙台に暮らしていて、SendaiRもなかったので、<br>
+「仕事始めたらTokyoRに行くぞ！」と思っていました。<br>
+最初は聞く専でしたが発表すると参加費無料みたいなのが当時はあったので、貧乏性な僕は<br>
+タダ飯を食べるために毎月何かしらLTを持っていっていた記憶があります。<br>
+今となっては動機が不純すぎますが、このときに知り合った方々とはTwitterでとても良くしてもらっています。</p>
+</section>
+</section>
+<section id="社会人2年目-rの優位性と自分のスキル不足" class="level2">
+<h2 class="anchored" data-anchor-id="社会人2年目-rの優位性と自分のスキル不足">社会人2年目: Rの優位性と自分のスキル不足</h2>
+<!-- 2019年 -->
+<section id="大規模やらかしと背景にあるスキル不足" class="level3">
+<h3 class="anchored" data-anchor-id="大規模やらかしと背景にあるスキル不足">大規模やらかしと背景にあるスキル不足</h3>
+<p>こうして現職で会社を変える経験を重ねることを選んだ僕ですが、<br>
+2年目にしてようやく「再現性」と「保守性」という壁にぶつかります。<br>
+こんな言葉にしなくても別にいい、とても簡単なことではあるのですが、<br>
+「同じコードを実行すれば同じ結果が得られる」ことや「自分以外の誰でも使いやすい状態にする」という配慮の<br>
+一切ないコードが、過去のフォルダにはあったのです。<br>
+RにはRprojectという機能があり、当時の僕もこれを使ってはいたものの、<br>
+Windowsのドキュメントフォルダに乱立するプロジェクトフォルダと、その中は一切整理されていない様子でした。<br>
+それに起因して現職の当時の取締役が謝罪するレベルの大きな失敗をしたのがこの頃だったなと思います。</p>
+<p>当時は僕以外では上司だけがまともにRを読み書きできる組織で、<br>
+ペアプログラミングもコードレビューも一切ありませんでした。<br>
+そもそもそういった慣習があることも知らなかったので、<br>
+自分が書いたコードが正しく結果を出すことを信じる方法を講じていませんでした。<br>
+結果自分が書いたコードの正しさを疑わず、間違った数字を提出し、<br>
+誤った数字を使って提出先が意思決定をし、その後に計算の誤りが発覚するという、<br>
+ビジネス上最悪に近いやらかし発見フローで事故の収拾に務めました。</p>
+<p>この失敗は自分が全くRを、データ分析プロジェクトを理解していないまま、<br>
+ただ数字あそびをしていたということを明確に突きつけてきた痛い記憶だったりします。<br>
+シンプルに自信を失ったし、シンプルに自分は無価値だなあとひどく落ち込んだ記憶があります。<br>
+とはいえ、必要な経験が出来たとも思います。2度と経験したくはないですが、<br>
+幸いとりあえず早めに謝ればいいということを学んだので、それも込みで良い経験をしたと思います。<br>
+第一、Rを使っていなければ、後述する自分のコーディングの見直しを通して、<br>
+いろいろな領域への関心をもつこともなかったと思います。</p>
+</section>
+<section id="プログラミング言語としてのrを勉強し直す" class="level3">
+<h3 class="anchored" data-anchor-id="プログラミング言語としてのrを勉強し直す">プログラミング言語としてのRを勉強し直す</h3>
+<p>以降、RProjectを立ち上げるだけでなく、プロジェクト内部でのフォルダ構成やLinting、<br>
+ドキュメンテーションまでの自動化などに力を入れてるようになりました。<br>
+今となっては当たり前ですが、その当たり前が僕自身の慢心により出来ていませんでした。<br>
+加えて、コードの中身も大きくスタイルを変更しました。<br>
+変数名を具体的にしたり、1行あたりの文字数を少なくしたりと、<br>
+これまでの自分が「ミスらないでしょｗ」と信頼していた要素一切を捨てました。<br>
+結果、ここからデータ分析プロジェクト上のミスはほとんどしなくなったなあと思います。<br>
+これまでの僕のRの理解は「強いExcel」扱いだったんだなという反省から、<br>
+社内のプロジェクトではデータパイプラインをRで書き、手作業の余地を減らす努力をしていたなと思います。<br>
+残念ながら抽象化が下手で、プロジェクト単位でパイプラインを組み立てる非効率な運用でしたが……。</p>
+<p>こうした形でフォルダ内の構成を強く意識したものの、どういった構成が望まれているのかは、<br>
+社内に明確な知見がなく、外部に探すほかありませんでした。<br>
+当時は機械学習の領域で、パイプラインのライブラリの開発が盛んで、<br>
+たとえば<code>kedro</code>のようなパイプラインOSSを使ってみて、フォルダ構成について勉強していた記憶があります。</p>
+<p>[https://socinuit.hatenablog.com/entry/2020/02/08/210423:embed:cite]</p>
+<p><code>kedro</code>の開発はかなり進んでいるので、もしかすると上の内容はだいぶ古いかもしれないです。ご注意ください。</p>
+<p>この年は本当にプログラミング言語として、Rを見直していたなあと思います。</p>
+</section>
+<section id="統計数理研究所リーディングdat" class="level3">
+<h3 class="anchored" data-anchor-id="統計数理研究所リーディングdat">統計数理研究所リーディングDAT</h3>
+<p>会社の予算で統計数理研究所のリーディングDAT養成コースを修了しました。<br>
+自分が背伸びして理解できるギリギリを学ぶことが出来たのはとても良かったなと思っています。<br>
+特に状態空間モデルの<code>KFAS</code>による実装については、後述するようにコロナ禍での時系列モデルの大きなヒントになりましたし、<br>
+ベイズ縮小推定は、直近上手く実装できる場面を見つける事ができました。<br>
+最先端ではないものの、統計学の数理的な要素をうまく仕事に活かす機会は、ここを経て少しずつ出てくることになります。<br>
+今思えばかなり破格で、良い講義の場をいただけたなあと思っているところです。</p>
+</section>
+</section>
+<section id="社会人3年目-後輩との仕事とコロナ" class="level2">
+<h2 class="anchored" data-anchor-id="社会人3年目-後輩との仕事とコロナ">社会人3年目: 後輩との仕事とコロナ</h2>
+<!-- 2020年 -->
+<section id="コロナ禍にデータで向き合う" class="level3">
+<h3 class="anchored" data-anchor-id="コロナ禍にデータで向き合う">コロナ禍にデータで向き合う</h3>
+<p>2020年にはコロナ禍が始まりました。入社3年目か。キャリアの半分は在宅勤務なんですねえ。<br>
+コロナ禍の感染者数推移がデイリーで更新されるというのは、行政がデータの蓄積と活用を<br>
+積極的に進めた非常に良い取り組みだったように思います。<br>
+データがあると分析してみたくなるのが性。今となっては当たり前な曜日と報告者数の規則性について、<br>
+Rのレガシーなコーディングで書いたこともありました。 [https://socinuit.hatenablog.com/entry/2020/03/31/194451:embed:cite]</p>
+</section>
+<section id="後輩の入社とr" class="level3">
+<h3 class="anchored" data-anchor-id="後輩の入社とr">後輩の入社とR</h3>
+<p>この年には後輩が入社しました。データ分析職の採用に関わっていたときに、<br>
+「最初のキャリアとして迷っている」と相談を受けて話をしたことがきっかけのようです。<br>
+後輩ができ、その育成に際しては、エンジニアではないなりにいくつか妥協して、<br>
+ペアプログラミングとコードレビューに力を入れたことでした。</p>
+<p>ここで後輩とやり取りしたことを通して、Rという言語と、それが目的とする「データの分析」は<br>
+ソフトウェアエンジニアリング以外にも開かれていて、それがもたらす功罪について考える事になりました。<br>
+たとえば以下のような記事に仕上げています。</p>
+<p>[https://socinuit.hatenablog.com/entry/2020/09/16/123811:embed:cite]</p>
+<p>つまり、Rは得意とする処理がエンジニア以外にも開かれた言語であり、<br>
+その文法の易しさから、どんな人でもすぐに分析ができる強みがあります。これは素敵な仕様である一方、<br>
+過去の僕がぶち当たったように、再現性や可読性、保守性のある開発指針というものに、<br>
+明確な合意がないのではないか、というものです。<br>
+2022年現在でも、<a href="https://google.github.io/styleguide/Rguide.html">Googleによるコーディングガイド</a>は知られていますが、<br>
+Pythonでいうところのpepのように、ユーザの大半が合意するような規約があるわけではない認識です。<br>
+細かなコーディング規約があることで参入障壁が上がるリスクはありつつも、<br>
+プログラミング言語としてのRの強みに気づいたら、その段階で何かしらのコーディングガイドに従った記述を心がけたほうが良いとは、今でも思います。</p>
+<p>嬉しい誤算は、後輩はこのあたりのリテラシーを多少心得ていたことで、<br>
+僕がやったような大きなやらかしはほとんどなかったことです。<br>
+裏を返せば、僕は後輩に教えることはそんなに多くなかった、ということでもあるんですが。</p>
+<p>コロナ禍の中では僕の働く業界は大きな影響を受けていました。それもいい方向に。<br>
+SARIMAモデルを作ったり、Causal Impactを試してみたりと、<br>
+クライアントの戦略再構築に関わることが出来たのは割とタイミングが良かったな、とも思います。</p>
+</section>
+<section id="仕事だけが人生でないと気づく" class="level3">
+<h3 class="anchored" data-anchor-id="仕事だけが人生でないと気づく">仕事だけが人生でないと気づく</h3>
+<p>年の後半は生産性を上げすぎてメンタルヘルスが追いつかなくなりました。<br>
+RやPythonで生産性を高めすぎて体が持たなくなった感じです。</p>
+</section>
+</section>
+<section id="社会人4年目-マネージャー初心者と人事戦略" class="level2">
+<h2 class="anchored" data-anchor-id="社会人4年目-マネージャー初心者と人事戦略">社会人4年目: マネージャー初心者と人事戦略</h2>
+<!-- 2021年 -->
+<p>2021年にRを積極的に書いた記憶があまりないのですが、よく考えたらTokyoRにもJapanRにも参加していませんでした。<br>
+Rに関する知識獲得を一切していなかったのです。</p>
+<section id="計算基盤や環境構築に向き合う" class="level3">
+<h3 class="anchored" data-anchor-id="計算基盤や環境構築に向き合う">計算基盤や環境構築に向き合う</h3>
+<p>AWSの環境構築やネットワークセキュリティに関する仕事に(なぜか)向き合うことになったり、<br>
+管理職になったのもこの年でした。<br>
+計算基盤については本当に何一つバックグラウンドがなかったので、TCP/IPの基本的な事項から勉強して、<br>
+仕事で無視してはいけない要素を社内のSEと議論しながら基盤構築のお手伝いをしていました。<br>
+僕の仕事はデータ分析だったはずなんですが、シェルを書いたりSSH接続したり、別のことをやっていた用に思います。<br>
+それはそれで楽しかったので、今は良い機会だったと思っています。</p>
+</section>
+<section id="採用人事の考えに触れる" class="level3">
+<h3 class="anchored" data-anchor-id="採用人事の考えに触れる">採用/人事の考えに触れる</h3>
+<p>コロナ禍を経て、会社の経営体制についても社員が主体的に参加できるよう、<br>
+いくつかの社内プロジェクトが立てられ、それに参加していました。<br>
+特に人事領域でのデータ活用に関するマネジメントや、データ分析人材要件の定義に関わりました。<br>
+ここで気づいた、もといそうだと知っていたものの実感として得られた経験には、<br>
+「理想の環境」も「理想の人材」も、結局は理想でしかないということでした。<br>
+データでわかる結果はこれまでやってきた仕事よりも生々しく、会社の課題を明確に示すのでした。<br>
+これが正直すごく面白かったので、社内の取り組み、ひいては「事業会社の面白さ」にも<br>
+少し触れることが出来たなと思います。</p>
+</section>
+<section id="rで新しいことをやる機会が減り実験の機会が増える" class="level3">
+<h3 class="anchored" data-anchor-id="rで新しいことをやる機会が減り実験の機会が増える">Rで新しいことをやる機会が減り、実験の機会が増える</h3>
+<p>簡単な集計・分析はRでほとんど自動化してしまい、仕事で新しくRのコードを書く場面は減りました。<br>
+その代わり管理職に就いたことで、任意の自主研究の時間を設定して「仕事で使うかよくわからないけどとりあえず作ってみるか」<br>
+というような実験のためにRを使っていました。<br>
+その多くは仕事に使うことはあんまりなかったですが、コードの中身を深く読み込む経験をしたのは、<br>
+ある程度勉強となったところです。<br>
+たとえばコレスポンデンス分析のお話は僕も社内で検討するために、以下の記事などを参照しながら、<br>
+Rのコードを読み込んで報告しました。<br>
+[https://bob3.hatenablog.com/entry/2022/01/15/123412:embed:cite]</p>
+</section>
+<section id="データ分析の民主化に関わる" class="level3">
+<h3 class="anchored" data-anchor-id="データ分析の民主化に関わる">データ分析の民主化に関わる</h3>
+<p>会社でデータ分析のWebアプリが開発されたので、それを使って他部門でのデータ分析の民主化に関わりました。<br>
+結果思った通りに民主化は進まなかったのですが、なぜ進まなかったのかについて根深く、解決しがいのある<br>
+組織課題を見つけることができたので、それはそれで次に繋がるなあと思いました。<br>
+とはいえ他の企業と比較して、会社がこれまで積み上げてきた文化・慣習・制度による制約が強く存在し、<br>
+そこをどう打開するべきかは、普通に経営目線での議論が必要でした。<br>
+結果、経営陣とのディスカッションも重ねる機会を得られたことは、他社で言えばちっぽけな問題であったとしても、<br>
+面白い機会をいただけたなと思います。</p>
+</section>
+<section id="メンタルの様子を見ながら転職活動を考える" class="level3">
+<h3 class="anchored" data-anchor-id="メンタルの様子を見ながら転職活動を考える">メンタルの様子を見ながら転職活動を考える</h3>
+<p>少しずつ自分が手を動かす余地が減り、Rで新しい分析を考える場面も減っていくと、<br>
+多少刺激が欲しくなるものでした。<br>
+メンタルをやっているので、自分なりに制限しながらではありますが、<br>
+2021年の後半はカジュアル面談をひっそり受けていました。<br>
+その際に、ある会社の役員の方に「今の会社でやりきったと思えるまでやるのもいいよ」と言われて、<br>
+3年前に聞いたそれ！ってなりました。<br>
+1社、最終面接まで行った会社はありましたが、やりきった感があんまりなかったので、<br>
+とりあえず辞退し、どこまでやれば「やりきった」と思えるのかを模索しようと考えたところです。</p>
+</section>
+</section>
+<section id="社会人5年目-スモールチームのマネジメントと転職" class="level2">
+<h2 class="anchored" data-anchor-id="社会人5年目-スモールチームのマネジメントと転職">社会人5年目: スモールチームのマネジメントと転職</h2>
+<!-- 2022年 -->
+<section id="やりきった感の定義" class="level3">
+<h3 class="anchored" data-anchor-id="やりきった感の定義">やりきった感の定義</h3>
+<p>この年の4月から、なんとなく「今年いっぱいで区切りがつくかな」と思っていました。<br>
+新しいメンバーを迎え入れ、計画より早くRを実務応用可能なレベルで習得いただき、<br>
+案件を少しずつ移譲していきました。大体は自動化していたので、あとは動作原理が分かれば使えるレベルでした。<br>
+社内プロジェクトもメンバー主導で動くことを確認し、いよいよ自分の仕事はなくなったし、<br>
+新しい仕事も、多分配下のメンバーでよしなに動くだろう、という見通しも立ったところで、<br>
+今の会社でやれることはやりきったな、と思いました。</p>
+<p>結局のところ、会社のどんな部分を変えることに関われたかはよくわかりませんが、<br>
+少なくともデータ分析の民主化による社員のデータ分析への意識付けや、実践に向けた課題については、<br>
+会社単位で動いているので、ここに関わり意識転換を促せたことが、一つあるかなあと思っているところです。</p>
+</section>
+<section id="転職活動" class="level3">
+<h3 class="anchored" data-anchor-id="転職活動">転職活動</h3>
+<p>転職活動ではいくつかエージェントと面談をしました。信頼していないとはいえ、<br>
+とりあえず情報だけはもらおうと思ったことが理由です。<br>
+4年前に比べて信頼に足るエージェントには巡り会えましたが、複数の企業への面接をこなす体力はなく、<br>
+結局自分からアプローチした会社の選考に臨みました。<br>
+結果2社からオファーを頂き、色々考慮して、次職を選びました。</p>
+</section>
+<section id="退職交渉" class="level3">
+<h3 class="anchored" data-anchor-id="退職交渉">退職交渉</h3>
+<p>今回は金の問題ではなく、今の会社でやれることはやったという達成感のもとで辞めるので、<br>
+正直どんな条件を向けられてもあまり意志は変わらないなと思いました。<br>
+役員にも「どうにか留める条件を考えたんだけど、見つかんないわ！」って言われたので、<br>
+「だよなｗ」って思いました。役員には色々とお世話になっている信頼関係があるので、<br>
+こういった会話が出来ています。<br>
+そういうことで年末で転職します。</p>
+</section>
+</section>
+<section id="rと得た知見" class="level2">
+<h2 class="anchored" data-anchor-id="rと得た知見">Rと得た知見</h2>
+<p>長ったらしく書くのが僕の特技なので、この4年半でRを通して得られた知見を列挙しておきます</p>
+<ul>
+<li>Rでキャリアを積み上げ、Rの経験を評価され、Rの実力で転職した</li>
+<li>Rはプログラミング言語である
+<ul>
+<li>集計や統計解析でアドホックに使う以外のことを思いつくと一気に広がる
+<ul>
+<li>Rで変なものを作る経験はすごくいい</li>
+</ul></li>
+</ul></li>
+<li>R以外のプログラミング言語に触れる
+<ul>
+<li>書いてないけどC++やCやRustやPythonに触れた。</li>
+<li>R以外のプログラミング言語を知るだけでRの凄さや怖さがわかる</li>
+</ul></li>
+<li>Rの適用対象を広げる。
+<ul>
+<li>自分の主事業とは別の領域での使われ方を知ると、<br>
+有意義な応用可能性が見つかるかもしれない</li>
+</ul></li>
+<li>仕事でRを使うことに加え、Rでできる仕事を定義するのも大事
+<ul>
+<li>実際「Rで縛ってプロジェクトを進める」ということは、エラーやリスクマネジメントを含め<br>
+メンバーの生産性を高めることにつながった</li>
+<li>Excelでできることを大規模にやるならRが向いているのでそういう仕事を探す。</li>
+</ul></li>
+<li>Rユーザとのつながりを大切にすると長期的にすごくいい
+<ul>
+<li>転職先の決め手は「TokyoRで知り合った友人が働いていること」だった</li>
+<li>TokyoRやJapanRで知ったことが仕事にすぐつながる</li>
+<li>良くしてもらっている方から献本をもらうなど、幸運もあった。</li>
+</ul></li>
+</ul>
+</section>
+<section id="年目以降とこれから" class="level2">
+<h2 class="anchored" data-anchor-id="年目以降とこれから">6年目以降とこれから</h2>
+<!-- 2023年 -->
+<p>少なくとも2023年もRで事業貢献をする予定です。<br>
+Pythonを指定されてもRを書くと思います。<br>
+ただ、Rに閉じるわけではなく、たとえばC++やRustで高速に計算できるモデルを作成して、<br>
+Rで分析を実施するみたいな動きも含めてチャレンジできたらいいなとは思っています。<br>
+加えて広く存在する統計理論の理解を深めるために、今よりもRと仲良くなれるといいなと思っています。</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

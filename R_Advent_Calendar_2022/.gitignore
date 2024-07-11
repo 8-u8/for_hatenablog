@@ -2,3 +2,8 @@
 *.csv
 Pipfile.lock
 .RData
+./output/*
+*.png
+*.rds
+blog_article.md
+blog_article02.md
