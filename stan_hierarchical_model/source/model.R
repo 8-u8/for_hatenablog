@@ -13,7 +13,7 @@ options(bitmapType = "cairo")
 # }
 
 # stan code path
-stan_filepath <- "source/hierarchical_stan.stan"
+stan_filepath <- "./source/hierarchical_stan.stan"
 
 # define data
 # to simple, we omit NA rows.
