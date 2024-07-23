@@ -1,6 +1,6 @@
 # load packages
 library(siMMMulator)
-
+set.seed(1234)
 # generate variables
 my_variables <- step_0_define_basic_parameters(years = 2,
   channels_impressions = c("Facebook", "TV"),
@@ -11,24 +11,22 @@ my_variables <- step_0_define_basic_parameters(years = 2,
   start_date = "2017/1/1"
 )
 
-channels_impressions <- my_variables[[2]]
-channels_clicks <- my_variables[[3]]
-
 # generate baseline
 df_baseline <- step_1_create_baseline(
   my_variables = my_variables,
   base_p = 500000,
-  trend_p = 1.8,
-  temp_var = 8,
+  trend_p = 0,
+  temp_var = 1,
   temp_coef_mean = 50000,
-  temp_coef_sd = 5000,
+  temp_coef_sd = 50000,
   error_std = 100000)
+plot(df_baseline$baseline_sales, type="l")
 
 # generate add spends
 df_ads_step2 <- step_2_ads_spend(
     my_variables = my_variables,
     campaign_spend_mean = 329000,
-    campaign_spend_std = 100000,
+    campaign_spend_std = 10000,
     max_min_proportion_on_each_channel <-  c(0.45, 0.55,
                                             0.15, 0.25)
 )
@@ -95,5 +93,6 @@ list_of_df_final <- step_9_final_df(
         df_ads_step7 = df_ads_step7
       )
 
+plot(list_of_df_final[[2]]$total_revenue, type = "l")
 write.csv(list_of_df_final[[2]], "./input/simulated_data.csv", row.names = FALSE,
  fileEncoding="utf-8")

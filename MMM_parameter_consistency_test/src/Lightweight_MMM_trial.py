@@ -78,7 +78,7 @@ mmm.fit(
     media_prior=costs_train,
     target=target_train,
     number_warmup=1000,
-    number_samples=5000,
+    number_samples=10_000,
     number_chains=5,
     # degrees_seasonality=degrees,
     weekday_seasonality=True,
