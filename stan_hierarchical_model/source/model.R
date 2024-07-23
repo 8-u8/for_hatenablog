@@ -17,7 +17,7 @@ stan_filepath <- "./source/hierarchical_stan.stan"
 
 # define data
 # to simple, we omit NA rows.
-usedata <- penguins |>
+usedata <- palmerpenguins::penguins |>
   na.omit()
 
 # input info for data block in stan code.
