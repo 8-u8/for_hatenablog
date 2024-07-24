@@ -1,2 +1,3 @@
-*.csv
 Pipfile.lock
+generated_holidays.csv
+output/*
