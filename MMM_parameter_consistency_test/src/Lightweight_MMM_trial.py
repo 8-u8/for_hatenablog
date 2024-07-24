@@ -7,7 +7,7 @@ from sklearn.metrics import mean_absolute_percentage_error
 
 from lightweight_mmm import preprocessing
 
-# from lightweight_mmm import utils
+from lightweight_mmm import utils
 from lightweight_mmm import lightweight_mmm
 from lightweight_mmm import plot
 from lightweight_mmm import optimize_media

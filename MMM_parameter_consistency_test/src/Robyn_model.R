@@ -66,7 +66,7 @@ OutputCollect <- robyn_outputs(
 )
 print(OutputCollect)
 
-model_no <- "2_58_6"
+model_no <- "1_618_4"
 ExportedModel <- robyn_write(InputCollect, OutputCollect,
                              model_no, export = FALSE)
 print(ExportedModel)
