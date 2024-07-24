@@ -2,7 +2,7 @@ library(Robyn)
 library(tidyverse)
 library(reticulate)
 
-# venv <- system("pipenv --venv", inter = TRUE)
+system("pipenv --venv", inter = TRUE)
 # reticulate::use_virtualenv(venv, required = TRUE) 
 output <- "./output/"
 

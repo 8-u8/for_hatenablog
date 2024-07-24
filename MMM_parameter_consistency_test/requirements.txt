@@ -2,6 +2,7 @@ jax == 0.4.20
 jaxlib == 0.4.20
 lightweight-mmm == 0.1.8
 scipy == 1.12.0
+nevergrad
 numpy
 pandas
 scikit-learn
