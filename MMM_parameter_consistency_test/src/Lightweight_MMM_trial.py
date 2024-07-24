@@ -106,10 +106,4 @@ lambda_table = pd.DataFrame(mmm.trace['lag_weight']._value, columns=mmm.media_na
 lambda_table.apply(np.mean, axis=0)
 
 # %%
-# plot.plot_model_fit(mmm, target_scaler=target_scaler)
-
-# %%
-# plot.plot_media_channel_posteriors(media_mix_model=mmm)
-plot.plot_media_baseline_contribution_area_plot(media_mix_model=mmm,
-                                                target_scaler=target_scaler,
-                                                fig_size=(30,10))
+utils.save_model(mmm, "./output/lightweight_mmm_20240724_model.pkl")
