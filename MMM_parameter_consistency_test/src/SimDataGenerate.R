@@ -1,4 +1,6 @@
 # load packages
+# https://facebookexperimental.github.io/siMMMulator/docs/step_by_step_guide
+
 library(siMMMulator)
 set.seed(1234)
 # generate variables
