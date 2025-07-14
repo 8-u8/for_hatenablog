@@ -15,5 +15,6 @@
 PipFile
 *.lock
 *.json
+.github/
 # *.zip
 # *.txt
