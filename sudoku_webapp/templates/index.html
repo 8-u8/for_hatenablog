@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数独ゲーム</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>数独ゲーム</h1>
+        
+        <div class="controls">
+            <div class="difficulty-selector">
+                <label for="difficulty">難易度:</label>
+                <select id="difficulty">
+                    <option value="easy">簡単</option>
+                    <option value="medium" selected>普通</option>
+                    <option value="hard">難しい</option>
+                    <option value="expert">エキスパート</option>
+                </select>
+            </div>
+            
+            <div class="buttons">
+                <button id="new-game" class="btn btn-primary">新しいゲーム</button>
+                <button id="solve" class="btn btn-secondary">解く</button>
+                <button id="clear" class="btn btn-warning">クリア</button>
+                <button id="validate" class="btn btn-info">検証</button>
+            </div>
+        </div>
+        
+        <div class="game-container">
+            <div class="sudoku-grid" id="sudoku-grid">
+                <!-- 9x9のグリッドがJavaScriptで生成される -->
+            </div>
+        </div>
+        
+        <div class="status" id="status">
+            <p>新しいゲームを開始してください</p>
+        </div>
+        
+        <div class="instructions">
+            <h3>遊び方</h3>
+            <ul>
+                <li>空いているマスに1-9の数字を入れてください</li>
+                <li>同じ行、列、3×3のボックスに同じ数字は入れられません</li>
+                <li>すべてのマスを埋めるとクリアです</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/sudoku.js') }}"></script>
+</body>
+</html>
