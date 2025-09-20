@@ -10,9 +10,9 @@ set.seed(20231212)
 
 mroz_rawdata <- read.dta("http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta")
 
-mroz_usedata <- mroz_rawdata %>% 
-  dplyr::mutate(log_wage = log(wage)) %>% 
-  dplyr::select(wage, log_wage, educ, exper, fatheduc, motheduc) %>% 
+mroz_usedata <- mroz_rawdata |>
+  dplyr::mutate(log_wage = log(wage)) |>
+  dplyr::select(wage, log_wage, educ, exper, fatheduc, motheduc) |>
   dplyr::filter(!is.na(wage))
   
 psych::cor.plot(mroz_usedata)
@@ -26,7 +26,7 @@ lm_model <- lm(
 # 設定：操作変数としてfatheduc/motheducを採用する
 # 二段階最小二乗法
 tls_first <- lm(educ ~ fatheduc + motheduc, data = mroz_usedata)
-mroz_usedata <- mroz_usedata %>% 
+mroz_usedata <- mroz_usedata |>
   dplyr::mutate(educ_fitted = fitted(tls_first))
 tls_second <- lm(log_wage ~ educ_fitted, data = mroz_usedata)
 
