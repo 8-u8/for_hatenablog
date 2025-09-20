@@ -5,17 +5,16 @@ data(bfi)
 
 bfi_to_pca <- bfi |> 
   dplyr::select(-gender, -education, -age)
- 
 
 psych::fa.parallel(
   bfi_to_pca, fa = "fa"
 )
 
 fa_result <- psych::fa(
-  bfi_to_pca, 
-  nfactors = 6,
-  rotate = "promax",
-  fm = "ml")
+                       bfi_to_pca,
+                       nfactors = 6,
+                       rotate = "promax",
+                       fm = "ml")
 
 summary(fa_result)
 

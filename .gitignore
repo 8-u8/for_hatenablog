@@ -5,6 +5,7 @@
 *.code-workspace
 ./l1_reguralization/requirements.txt
 ./l1_reguralization/Pipfile
+./Lasso_Trial/out/
 
 /quantumblack_causalnex/__pycache__
 /quantumblack_causalnex/Pipfile
