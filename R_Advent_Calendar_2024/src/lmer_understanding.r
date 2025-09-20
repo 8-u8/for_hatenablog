@@ -8,7 +8,6 @@ bfi_to_pca <- bfi |>
 
 
 psych::fa.parallel(
-<<<<<<< HEAD
   bfi_to_pca, fa = "fa"
 )
 
@@ -44,7 +43,3 @@ summary(fa_result)
 
 fa_result$weights  # 因子負荷量
 fa_result$scores   # 因子特点行列
-=======
-  bfi_to_pca
-)
->>>>>>> 2c299ab48a44e2a856c572c622bbef4d1980893c
