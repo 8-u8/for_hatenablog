@@ -153,3 +153,47 @@ me_array[i_idx, , ]   # 行列: j x l
 ame_self_time <- mean(sapply(seq_len(nrow(me_array)), function(ii) {
   sum(diag(me_array[ii, , ]))  # diag = ∂P_{ij}/∂x_{ij} summed over j
 }))
+
+
+# ブートストラップによる標準誤差の推定
+B <- 200
+ame_boot <- numeric(0)
+success_count <- 0
+for(b in 1:B){
+  ids <- sample(unique(df$id), replace = TRUE)
+  bsamp_df <- do.call(rbind, lapply(ids, function(x) df[df$id == x, ]))
+  bsamp_df$id <- rep(1:length(ids), each = 3)  # Re-index the id column
+  # Add small noise to prevent singularity
+  bsamp_df$time <- bsamp_df$time + rnorm(nrow(bsamp_df), 0, 0.01)
+  bsamp_df$cost <- bsamp_df$cost + rnorm(nrow(bsamp_df), 0, 0.01)
+  bsamp <- mlogit.data(bsamp_df, choice = "choice", shape = "long", alt.var = "mode")
+  
+  # Try to fit model with error handling
+  model_b <- tryCatch({
+    update(model, data = bsamp)
+  }, error = function(e) {
+    return(NULL)
+  })
+  
+  if(!is.null(model_b)){
+    res_b <- compute_me_alt_specific(model_b, bsamp, "time", coef(model_b), FALSE)
+    ame_boot <- c(ame_boot, mean(
+      sapply(
+        seq_len(
+          dim(res_b$ME)[1]),
+           function(ii) {
+             me_mat <- res_b$ME[ii, , ]
+             if(is.matrix(me_mat) && nrow(me_mat) == ncol(me_mat)) {
+               sum(diag(me_mat))
+             } else {
+               NA
+             }
+           }
+           ), na.rm = TRUE
+           ))
+    success_count <- success_count + 1
+  }
+}
+cat("Successfully converged:", success_count, "out of", B, "iterations\n")
+se_ame <- sd(ame_boot)
+se_ame
