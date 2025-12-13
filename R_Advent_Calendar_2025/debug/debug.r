@@ -1,5 +1,4 @@
 source("./module/module.R")
-source("./monte_carlo.R", )
 
 # 固定パラメータでテスト
 test_mc_small <- run_monte_carlo(

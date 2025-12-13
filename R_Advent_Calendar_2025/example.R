@@ -86,7 +86,7 @@ simulate_ts_data <- simulate_ts_data |>
   )
 
 iv_model <- ivreg::ivreg(
-  y ~ time + intervention + time_after | 
+  y ~ time + intervention + time_after + y_lag1| 
   time + intervention + time_after + y_lag2,
   data = simulate_ts_data,
   method = "OLS" # 2LS
@@ -132,3 +132,4 @@ params_comparison <- params |>
   )
 
 params_comparison
+
