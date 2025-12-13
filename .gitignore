@@ -18,5 +18,7 @@ PipFile
 *.json
 .github/
 .vscode/
+*.csv
+*.png
 # *.zip
 # *.txt
