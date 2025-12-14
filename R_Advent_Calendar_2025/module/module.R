@@ -12,6 +12,7 @@ showtext_auto()
 #' @param level_change 介入による水準変化
 #' @param slope_change 介入による傾き変化
 #' @param noise_sd ノイズの標準偏差
+#' @param y_rho yの自己回帰パラメータ（0-1の範囲）
 #' @param ar_coef 自己回帰係数（ARモデル用、0-1の範囲）
 #' @param seed 乱数シード
 #'
