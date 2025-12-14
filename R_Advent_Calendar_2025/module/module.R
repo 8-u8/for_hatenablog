@@ -413,7 +413,7 @@ plot_monte_carlo_results <- function(summary_df, true_params, y_rho = 0) {
   # 真の値の周辺に範囲を制限（±30%または絶対値で±5のどちらか大きい方）
   y_limits <- true_values |>
     dplyr::mutate(
-      range = pmax(abs(true_value) * 1.5, 5),
+      range = pmax(abs(true_value) * 1.5, 0.75),
       y_min = true_value - range,
       y_max = true_value + range
     )
