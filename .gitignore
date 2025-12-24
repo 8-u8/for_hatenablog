@@ -16,7 +16,6 @@
 PipFile
 *.lock
 *.json
-.github/
 .vscode/
 *.csv
 *.png
