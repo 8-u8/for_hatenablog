@@ -33,8 +33,25 @@ applyTo: '**'
 
 ### 使用する言語
 - 主にRとPythonを使用してコードを生成します。
-  - Rコードの場合、 `.github/copilot/skills/R_skills.instructions.md` に従ってください。
-  - Pythonコードの場合、`.github/copilot/skills/Python_skills.instructions.md` に従ってください。
+  - Rコードの場合、 `.github/copilot/instructions/R.instructions.md` に従ってください。
+  - Pythonコードの場合、`.github/copilot/instructions/Python.instructions.md` に従ってください。
+  - 可視化コードの場合、`.github/copilot/skills/visualization/SKILL.md` に従ってください。
+  - 日本語ドキュメントの場合、`.github/copilot/skills/japanese-tech-writing/SKILL.md` に従ってください。
+
+### 既存Skills援用方針
+- 既存のSkillsを優先して再利用し、同じルールを重複定義しないでください。
+  - 本リポジトリでは、共通ルールをこのファイルに集約し、言語・成果物ごとの詳細は個別Skillsに分離します。
+  - 指示ファイルは「薄い共通 + 専門スキル」の構成を維持し、必要最小限の追記で運用してください。
+- 新しいSkillsを追加する場合は、以下を満たしてください。
+  - 適用対象(`applyTo`)を限定し、誤適用を防止する。
+  - 既存Skillsとの重複を避け、参照関係を明示する。
+  - セキュリティ要件（秘密情報・個人情報・認証情報の扱い）を明記する。
+
+### セキュア運用の必須要件
+- rawデータ、個人情報、認証情報(APIキー、トークン、パスワード)をコード・ドキュメント・出力物に含めないでください。
+- 実験で生成した図表や数表を公開する前に、匿名化・集計化で再識別リスクを下げてください。
+- 外部情報を使う説明文では、確認できた事実と推測を明確に分離してください。
+- 破壊的な操作（削除、強制上書き、大量更新）は、明示指示がある場合のみ実行してください。
 
 ## 実験アプローチ
 - 技術的な探索や実験を行う際には、以下のアプローチを採用してください。
